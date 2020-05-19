@@ -1,0 +1,11 @@
+# complie output
+/dist
+/temp
+
+# dependencies
+# terraform exclude
+aws_key_pair/*
+*.tfstate
+*.tfstate.backup
+*.terraform/
+*/.DS_Store
