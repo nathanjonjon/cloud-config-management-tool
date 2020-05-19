@@ -9,4 +9,3 @@ aws_key_pair/*
 *.tfstate.backup
 *.terraform/
 *.DS_Store
-terraform.tfstate
