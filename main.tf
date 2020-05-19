@@ -1,20 +1,18 @@
-variable "content" {default = "hello world"}
 
-output "out" {value = var.content}
 
-variable "access_key" {}
-variable "secret_key" {}
-variable "aws_key_pair" {}
+# variable "access_key" {}
+# variable "secret_key" {}
+# variable "aws_key_pair" {}
 
-provider "aws" {
-  access_key = var.access_key
-  secret_key = var.secret_key
-  region     = "us-east-1"
-}
+# provider "aws" {
+#   # access_key = var.access_key
+#   # secret_key = var.secret_key
+#   region     = "us-east-1"
+# }
 
 resource "aws_security_group" "web_sg" {
   name        = "web_sg"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "80 port"
@@ -36,7 +34,7 @@ resource "aws_security_group" "web_sg" {
 
 resource "aws_security_group" "db_sg" {
   name        = "db_sg"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "80 port"
@@ -57,12 +55,13 @@ resource "aws_security_group" "db_sg" {
 }
 
 resource "aws_instance" "Nathan_WebServer" {
-  ami             = "ami-003634241a8fcdec0"
+  # ami             = "ami-003634241a8fcdec0"
+  ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
   instance_type   = "t2.micro"
   availability_zone = var.availability_zone
   key_name = var.key_name
   vpc_security_group_ids = ["${aws_security_group.web_sg.id}"]
-  subnet_id = aws_subnet.main-public
+  subnet_id = aws_subnet.main-public.id
   tags = {Name = "Nathan_WebServer", Owner = "Nathan"}
   connection { # Connect remote EC2
     type        = "ssh"
@@ -73,17 +72,13 @@ resource "aws_instance" "Nathan_WebServer" {
 }
 
 resource "aws_instance" "Nathan_DB" {
-  ami             = "ami-003634241a8fcdec0"
+  # ami             = "ami-003634241a8fcdec0"
+  ami = data.aws_ami.ubuntu.id
   instance_type   = "t2.micro"
   availability_zone = var.availability_zone
   key_name = var.key_name
   vpc_security_group_ids = ["${aws_security_group.db_sg.id}"]
-  subnet_id = aws_subnet.main-private
+  subnet_id = aws_subnet.main-private.id
   tags = {Name = "Nathan_DB", Owner = "Nathan"}
-}
-
-
-output "instance_ip_addr" {
-  value = aws_instance.Nathan_DB.private_ip
 }
 
