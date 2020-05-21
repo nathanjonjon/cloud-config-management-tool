@@ -1,7 +1,7 @@
-provider "aws" {
-  region = var.AWS_REGION
-  version = "~> 2.55"
-}
+# provider "aws" {
+#   region = var.AWS_REGION
+#   version = "~> 2.55"
+# }
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   instance_tenancy     = "default"

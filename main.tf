@@ -1,14 +1,10 @@
 
-
-# variable "access_key" {}
-# variable "secret_key" {}
-# variable "aws_key_pair" {}
-
-# provider "aws" {
-#   # access_key = var.access_key
-#   # secret_key = var.secret_key
-#   region     = "us-east-1"
-# }
+provider "aws" {
+  access_key = var.access_key
+  secret_key = var.secret_key
+  region = var.AWS_REGION
+  version = "~> 2.55"
+}
 
 resource "aws_security_group" "web_sg" {
   name        = "web_sg"
@@ -41,7 +37,7 @@ resource "aws_security_group" "db_sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    security_groups = ["${aws_security_group.web_sg.id}"]
+    security_groups = [aws_security_group.web_sg.id]
   }
 
   egress {
@@ -60,14 +56,14 @@ resource "aws_instance" "Nathan_WebServer" {
   instance_type   = "t2.micro"
   availability_zone = var.availability_zone
   key_name = var.key_name
-  vpc_security_group_ids = ["${aws_security_group.web_sg.id}"]
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
   subnet_id = aws_subnet.main-public.id
   tags = {Name = "Nathan_WebServer", Owner = "Nathan"}
   connection { # Connect remote EC2
     type        = "ssh"
     host        = self.public_ip # bind public ip
     user        = "ec2-user"
-    private_key = "${file(var.aws_key_pair)}"
+    private_key = file(var.aws_key_pair)
   }
 }
 
@@ -77,7 +73,7 @@ resource "aws_instance" "Nathan_DB" {
   instance_type   = "t2.micro"
   availability_zone = var.availability_zone
   key_name = var.key_name
-  vpc_security_group_ids = ["${aws_security_group.db_sg.id}"]
+  vpc_security_group_ids = [aws_security_group.db_sg.id]
   subnet_id = aws_subnet.main-private.id
   tags = {Name = "Nathan_DB", Owner = "Nathan"}
 }
