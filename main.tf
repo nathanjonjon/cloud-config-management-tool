@@ -1,89 +1,76 @@
-variable "content" {default = "hello world"}
-
-output "out" {value = var.content}
-
-variable "access_key" {}
-variable "secret_key" {}
-variable "aws_key_pair" {}
-
 provider "aws" {
-  access_key = var.access_key
-  secret_key = var.secret_key
-  region     = "us-east-1"
+  # access_key = var.access_key
+  # secret_key = var.secret_key
+  region = var.AWS_REGION
+  version = "~> 2.55"
 }
-
-resource "aws_security_group" "web_sg" {
-  name        = "web_sg"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description = "80 port"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  instance_tenancy     = "default"
+  enable_dns_support   = "true"
+  enable_dns_hostnames = "true"
+  enable_classiclink   = "false"
+  tags = {
+    Name = "main-nextlink"
   }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {Name = "Nathan_WebServer_sg", Owner = "Nathan"}
-  
 }
+# ======== Subnet ==================
+resource "aws_subnet" "main-public" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24" # 剩餘0~255的ip subnet可用
+  map_public_ip_on_launch = "true"
+  availability_zone       = var.availability_zone
 
-resource "aws_security_group" "db_sg" {
-  name        = "db_sg"
-  vpc_id      = var.vpc_id
-
-  ingress {
-    description = "80 port"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    security_groups = ["${aws_security_group.web_sg.id}"]
+  tags = {
+    Name = "main-public"
   }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {Name = "Nathan_DB_sg", Owner = "Nathan"}
-  
 }
+resource "aws_subnet" "main-private" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24" # 剩餘0~255的ip subnet可用
+  map_public_ip_on_launch = "false"
+  availability_zone       = var.availability_zone
 
-resource "aws_instance" "Nathan_WebServer" {
-  ami             = "ami-003634241a8fcdec0"
-  instance_type   = "t2.micro"
-  availability_zone = var.availability_zone
-  key_name = var.key_name
-  vpc_security_group_ids = ["${aws_security_group.web_sg.id}"]
-  subnet_id = aws_subnet.main-public
-  tags = {Name = "Nathan_WebServer", Owner = "Nathan"}
-  connection { # Connect remote EC2
-    type        = "ssh"
-    host        = self.public_ip # bind public ip
-    user        = "ec2-user"
-    private_key = "${file(var.aws_key_pair)}"
+  tags = {
+    Name = "main-private"
+  }
+}
+# ===========  # Internet Gateway =================
+resource "aws_internet_gateway" "main-igw" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "main-igw"
+  }
+} 
+
+# ===========  Route Table =================
+resource "aws_route_table" "main-public-rtb" {
+  vpc_id = aws_vpc.main.id
+  route{
+      cidr_block = "0.0.0.0/0"
+      gateway_id = aws_internet_gateway.main-igw.id
+  }
+  tags = {
+    Name = "main-public-rtb"
   }
 }
 
-resource "aws_instance" "Nathan_DB" {
-  ami             = "ami-003634241a8fcdec0"
-  instance_type   = "t2.micro"
-  availability_zone = var.availability_zone
-  key_name = var.key_name
-  vpc_security_group_ids = ["${aws_security_group.db_sg.id}"]
-  subnet_id = aws_subnet.main-private
-  tags = {Name = "Nathan_DB", Owner = "Nathan"}
+resource "aws_route_table" "main-private-rtb" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "main-private-rtb"
+  }
 }
 
+# route associations public
+resource "aws_route_table_association" "main-public-asso-rtb" {
+  subnet_id      = aws_subnet.main-public.id
+  route_table_id = aws_route_table.main-public-rtb.id
+}
 
-output "instance_ip_addr" {
-  value = aws_instance.Nathan_DB.private_ip
+resource "aws_route_table_association" "main-private-asso-rtb" {
+  subnet_id      = aws_subnet.main-private.id
+  route_table_id = aws_route_table.main-private-rtb.id
 }
 
