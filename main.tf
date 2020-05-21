@@ -56,11 +56,29 @@ resource "aws_route_table" "main-public-rtb" {
   }
 }
 
+<<<<<<< HEAD
 resource "aws_route_table" "main-private-rtb" {
   vpc_id = aws_vpc.main.id
   tags = {
     Name = "main-private-rtb"
   }
+=======
+resource "aws_instance" "Nathan_WebServer" {
+  # ami             = "ami-003634241a8fcdec0"
+  ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
+  instance_type   = "t2.micro"
+  availability_zone = var.availability_zone
+  key_name = var.key_name
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  subnet_id = aws_subnet.main-public.id
+  tags = {Name = "Nathan_WebServer", Owner = "Nathan"}
+  # connection { # Connect remote EC2
+  #   type        = "ssh"
+  #   host        = self.public_ip # bind public ip
+  #   user        = "ec2-user"
+  #   private_key = file(var.aws_key_pair)
+  # }
+>>>>>>> 56110166105b5c3e8965d859ef0d1a67a9bdc939
 }
 
 # route associations public
