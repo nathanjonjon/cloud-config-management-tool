@@ -11,3 +11,7 @@ variable "key_name" {default = "oscar-nl-virginia"}
 
 # variable "access_key" {}
 # variable "secret_key" {}
+
+variable "webserver_ip" {
+  default = "10.0.1.10"
+}

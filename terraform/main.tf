@@ -93,3 +93,47 @@ resource "aws_route_table_association" "main-private-asso-rtb" {
   route_table_id = aws_route_table.main-private-rtb.id
 }
 
+# ===========  SG =================
+resource "aws_security_group" "web_sg" {
+  name        = "web_sg"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description = "80 port"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {Name = "Nathan_WebServer_sg", Owner = "Nathan"}
+  
+}
+
+resource "aws_security_group" "db_sg" {
+  name        = "db_sg"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description = "80 port"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    security_groups = [aws_security_group.web_sg.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {Name = "Nathan_DB_sg", Owner = "Nathan"}
+  
+}
