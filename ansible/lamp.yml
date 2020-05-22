@@ -1,0 +1,27 @@
+- name: main
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: plan
+      terraform:
+        project_path: "terraform/"
+        plan_file: “ansible/tfplan”
+        lock: true
+        state: planned
+        variables:
+          webserver_ip: 10.0.1.10
+    - name: apply
+      terraform:
+        project_path: "terraform/"
+        lock: true
+        state: present
+        variables:
+          webserver_ip: 10.0.1.10
+    - name: destroy
+      terraform:
+        project_path: "terraform/"
+        lock: true
+        state: absent
+        variables:
+          webserver_ip: 10.0.1.10
