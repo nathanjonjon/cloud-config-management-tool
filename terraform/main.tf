@@ -61,6 +61,7 @@ resource "aws_route_table" "main-private-rtb" {
   tags = {
     Name = "main-private-rtb"
   }
+}
 
 # ===========  Instances =================
 resource "aws_instance" "Nathan_WebServer" {
