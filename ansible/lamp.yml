@@ -11,6 +11,8 @@
         state: planned
         variables:
           webserver_ip: 10.0.1.10
+        tags:
+          - plan
     - name: apply
       terraform:
         project_path: "terraform/"
@@ -18,6 +20,8 @@
         state: present
         variables:
           webserver_ip: 10.0.1.10
+        tags:
+          - apply
     - name: destroy
       terraform:
         project_path: "terraform/"
@@ -25,3 +29,5 @@
         state: absent
         variables:
           webserver_ip: 10.0.1.10
+        tags:
+          - destroy
