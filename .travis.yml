@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+os: linux
+dist: bionic # Ubuntu 18.04
+language: bash
+>>>>>>> de3415ed8f103308c1ee164a21c9e9b4dad31a1a
 os: linux  # The default OS
 dist: bionic # Ubuntu 18.04
 arch: arm64 # Architecture signifying a containerized version of Linux to boot faster
@@ -11,6 +17,13 @@ branches:
 env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
+<<<<<<< HEAD
+=======
+branches:
+  only:
+    - master
+
+>>>>>>> de3415ed8f103308c1ee164a21c9e9b4dad31a1a
 # Install dependencies
 before_install:
   - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
@@ -24,6 +37,12 @@ jobs:
   include:
     - stage: terraform plan
       # Only run terraform validate and plan state if within a pull request
+<<<<<<< HEAD
+=======
+      if: type IN (pull_request)
+      script:
+        - echo "Executing Terraform Plan on pull request code"
+>>>>>>> de3415ed8f103308c1ee164a21c9e9b4dad31a1a
       if: type IN (pull_request, api)
       script:
         - echo "Validating Terraform fmt"
@@ -36,6 +55,12 @@ jobs:
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push) and branch = master
       script:
+<<<<<<< HEAD
+=======
+        - echo "Executing Terraform Apply on merged code"
+>>>>>>> de3415ed8f103308c1ee164a21c9e9b4dad31a1a
         - echo "Merge detected, executing changes"
         - terraform init $tf_init_cli_options
         - terraform apply $tf_apply_cli_options
+        - terraform destroy
+        - echo "No error, infra destroyed completely"
