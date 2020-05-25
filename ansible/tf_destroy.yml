@@ -1,0 +1,16 @@
+- name: terraform destroy
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: destroy
+      terraform:
+        project_path: ../terraform/
+        lock: true
+        state: absent
+        variables:
+          webserver_ip: "{{ webserver_ip }}"
+      tags:
+        - destroy
