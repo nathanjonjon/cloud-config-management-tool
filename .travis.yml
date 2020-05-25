@@ -8,7 +8,6 @@ branches:
     - master
     - nathan
     - dev
-    - test
 
 # Export variables
 env:
@@ -28,7 +27,7 @@ jobs:
   include:
     - stage: terraform plan
       # Only run terraform validate and plan state if within a pull request
-      if: type IN (push) and branch = nathan
+      if: type IN (push) and branch = dev
       script:
         - echo "test git commands"
         - git branch -a
