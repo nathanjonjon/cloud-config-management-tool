@@ -40,6 +40,11 @@ jobs:
         # - terraform apply $tf_apply_cli_options
         # - terraform destroy -auto-approve
         # - echo "No error, infra destroyed completely"
+        - git branch -a
+        - git branch
+        - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+        - git fetch --all
+        - git -branch -a
         - ./merge.sh $USER_NAME $PASS_WORD
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
