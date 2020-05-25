@@ -27,7 +27,7 @@ jobs:
   include:
     - stage: terraform plan
       # Only run terraform validate and plan state if within a pull request
-      if: type IN (push) and branch = dev
+      if: type IN (push) and branch = nathan
       script:
         - echo "Executing Terraform Plan on pull request code"
         - echo "Validating Terraform fmt"
@@ -36,9 +36,10 @@ jobs:
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
+        - git branch
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
-      if: type IN (push) and (branch = nathan or branch = master)
+      if: type IN (push) and branch = master
       script:
         - echo "Executing Terraform Apply on merged code"
         - echo "Merge detected, executing changes"
@@ -46,4 +47,3 @@ jobs:
         - terraform apply $tf_apply_cli_options
         - terraform destroy -auto-approve
         - echo "No error, infra destroyed completely"
-        - git log
