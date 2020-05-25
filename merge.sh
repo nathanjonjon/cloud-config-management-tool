@@ -10,11 +10,12 @@ GIT_PASS="$2"
 
 # Specify the development branch and stable branch names
 FROM_BRANCH="nathan"
+CURRENT_BRANCH="nathan"
 TO_BRANCH="dev"
 
 
 # Create the URL to push merge to 
-URL="https://github.com/internnn/nextlinker_cmdb.git"
+URL="https://github.com/$GIT_USER/nextlinker_cmdb.git"
 echo "Repo url is $URL"
 PUSH_URL="https://$GIT_USER:$GIT_PASS@${URL:6}"
 
