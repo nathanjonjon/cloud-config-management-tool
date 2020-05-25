@@ -32,7 +32,7 @@ jobs:
       script:
         - echo "test git commands"
         - git branch
-        - git checkout test
+        - git checkout master
         - git branch
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
