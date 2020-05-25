@@ -27,7 +27,7 @@ jobs:
   include:
     - stage: terraform plan
       # Only run terraform validate and plan state if within a pull request
-      if: type IN (push) and branch = dev
+      if: type IN (push) and branch = nathan
       script:
         - echo "Validating Terraform fmt"
         - terraform fmt -recursive -check
@@ -41,20 +41,20 @@ jobs:
         - terraform destroy -auto-approve
         - echo "No error, infra destroyed completely"
         - git add .
-        - git commit -m "commit automatically by travis in dev"
+        - git commit -m "commit automatically by travis in nathan"
         - git push
         - echo "push complete"
-        - echo "checkout to master"
+        - echo "checkout to dev"
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
-        - git checkout test
-        - git pull origin dev
+        - git checkout dev
+        - git pull origin nathan
         - git add .
-        - git commit -m "commit automatically by travis in master"
+        - git commit -m "commit automatically by travis in dev"
         - git push 
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
-      if: type IN (push) and branch = master
+      if: type IN (push) and branch = dev
       script:
         - echo "hey!"
         - terraform init $tf_init_cli_options
