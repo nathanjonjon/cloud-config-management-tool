@@ -13,6 +13,6 @@ variable "availability_zone" {
 variable "key_name" {default = "nathan_east1_key"}
 
 
-variable "access_key" {default = "AKIAS4EJIHFWE42ZZMVD"}
-variable "secret_key" {default = "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"}
+variable "access_key" {}
+variable "secret_key" {}
 
