@@ -59,7 +59,7 @@ resource "aws_security_group" "db_sg" {
     description = "22 port"
     from_port   = 22
     to_port     = 22
-    protocol    = "ssh"
+    protocol    = "tcp"
     security_groups = [aws_security_group.web_sg.id]
   }
 
@@ -84,7 +84,7 @@ resource "aws_instance" "Nathan_WebServer" {
   subnet_id = aws_subnet.main-public.id
   tags = {Name = "Nathan_WebServer", Owner = "Nathan"}
   # connection { # Connect remote EC2
-  #   type        = "ssh"
+  #   type        = "tcp"
   #   host        = self.public_ip # bind public ip
   #   user        = "ec2-user"
   #   private_key = file(var.aws_key_pair)
