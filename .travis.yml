@@ -31,8 +31,8 @@ jobs:
       if: type IN (push) and branch = nathan
       script:
         - echo "test git commands"
-        - git branch
-        - git fetch
+        - git branch -a
+        - git fetch --all
         - git checkout test
         - git branch
     - stage: terraform apply
