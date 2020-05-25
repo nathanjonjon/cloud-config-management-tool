@@ -1,7 +1,7 @@
 os: linux
 dist: xenial # Ubuntu 16.04
 language: bash
-arch: arm64 # Architecture signifying a containerized version of Linux to boot faster
+arch: amd64 # Architecture signifying a containerized version of Linux to boot faster
 # Only build pushes to master branch
 branches:
   only:
