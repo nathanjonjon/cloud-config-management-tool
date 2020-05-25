@@ -29,18 +29,34 @@ jobs:
       # Only run terraform validate and plan state if within a pull request
       if: type IN (push) and branch = dev
       script:
-        - echo "test git commands"
-        - git branch -a
+        - echo "Validating Terraform fmt"
+        - terraform fmt -recursive -check
+        - echo "Creating change plan"
+        - terraform init $tf_init_cli_options
+        - terraform validate $tf_validation_cli_options
+        - terraform plan $tf_plan_cli_options
+        - echo "Executing changes"
+        - terraform init $tf_init_cli_options
+        - terraform apply $tf_apply_cli_options
+        - terraform destroy -auto-approve
+        - echo "No error, infra destroyed completely"
+        - git add .
+        - git commit -m "commit automatically by travis in dev"
+        - git push
+        - echo "push complete"
+        - echo "checkout to master"
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
         - git checkout test
-        - git branch -a
+        - git pull origin dev
+        - git add .
+        - git commit -m "commit automatically by travis in master"
+        - git push 
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push) and branch = master
       script:
-        - echo "Executing Terraform Apply on merged code"
-        - echo "Merge detected, executing changes"
+        - echo "hey!"
         - terraform init $tf_init_cli_options
         - terraform apply $tf_apply_cli_options
         - terraform destroy -auto-approve
