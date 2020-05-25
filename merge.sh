@@ -14,7 +14,7 @@ TO_BRANCH="dev"
 
 
 # Create the URL to push merge to 
-URL=$(git remote -v | head -n1 | cut -f2 | cut -d" " -f1)
+URL="https://github.com/internnn/nextlinker_cmdb.git"
 echo "Repo url is $URL"
 PUSH_URL="https://$GIT_USER:$GIT_PASS@${URL:6}"
 
