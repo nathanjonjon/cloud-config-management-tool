@@ -74,8 +74,6 @@ resource "aws_security_group" "db_sg" {
   
 }
 
-
-
 resource "aws_instance" "Nathan_WebServer" {
   # ami             = "ami-003634241a8fcdec0"
   ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
@@ -94,7 +92,10 @@ resource "aws_instance" "Nathan_WebServer" {
 }
 
 resource "aws_instance" "Nathan_DB" {
+<<<<<<< HEAD
   # ami             = "ami-003634241a8fcdec0"
+=======
+>>>>>>> master
   ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
   instance_type   = "t2.micro"
   availability_zone = var.availability_zone
@@ -102,6 +103,7 @@ resource "aws_instance" "Nathan_DB" {
   vpc_security_group_ids = [aws_security_group.db_sg.id]
   subnet_id = aws_subnet.main-private.id
   tags = {Name = "Nathan_DB", Owner = "Nathan"}
+<<<<<<< HEAD
   # connection { # Connect remote EC2
   #   type        = "ssh"
   #   host        = self.public_ip # bind public ip
@@ -109,3 +111,6 @@ resource "aws_instance" "Nathan_DB" {
   #   private_key = file(var.aws_key_pair)
   # }
 }
+=======
+}
+>>>>>>> master

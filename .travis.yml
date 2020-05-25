@@ -1,7 +1,13 @@
 os: linux
+<<<<<<< HEAD
 dist: bionic # Ubuntu 18.04
 language: bash
 arch: arm64 # Architecture signifying a containerized version of Linux to boot faster
+=======
+dist: xenial # Ubuntu 16.04
+language: bash
+arch: amd64 # Architecture signifying a containerized version of Linux to boot faster
+>>>>>>> master
 # Only build pushes to master branch
 branches:
   only:
@@ -11,12 +17,9 @@ branches:
 env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
-branches:
-  only:
-    - master
-
 # Install dependencies
 before_install:
+  - sudo apt-get install -y -qq unzip
   - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
   - unzip terraform_"$tf_version"_linux_amd64.zip
   - sudo mv terraform /usr/local/bin/
@@ -28,11 +31,9 @@ jobs:
   include:
     - stage: terraform plan
       # Only run terraform validate and plan state if within a pull request
-      if: type IN (pull_request)
-      script:
-        - echo "Executing Terraform Plan on pull request code"
       if: type IN (pull_request, api)
       script:
+        - echo "Executing Terraform Plan on pull request code"
         - echo "Validating Terraform fmt"
         - terraform fmt -recursive -check
         - echo "Pull request detected, creating change plan"
@@ -47,5 +48,5 @@ jobs:
         - echo "Merge detected, executing changes"
         - terraform init $tf_init_cli_options
         - terraform apply $tf_apply_cli_options
-        - terraform destroy
+        - terraform destroy -auto-approve
         - echo "No error, infra destroyed completely"
