@@ -63,7 +63,7 @@ resource "aws_route_table_association" "main-public-asso-rtb" {
   route_table_id = aws_route_table.main-public-rtb.id
 }
 
-resource "aws_route_table_association" "main-private-asso-rtb" {
-  subnet_id      = aws_subnet.main-private.id
-  route_table_id = aws_route_table.main-private-rtb.id
-}
+# resource "aws_route_table_association" "main-private-asso-rtb" {
+#   subnet_id      = aws_subnet.main-private.id
+#   route_table_id = aws_route_table.main-private-rtb.id
+# }
