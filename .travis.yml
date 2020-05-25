@@ -1,10 +1,7 @@
 os: linux
 dist: bionic # Ubuntu 18.04
 language: bash
-os: linux  # The default OS
-dist: bionic # Ubuntu 18.04
 arch: arm64 # Architecture signifying a containerized version of Linux to boot faster
-language: bash
 # Only build pushes to master branch
 branches:
   only:
