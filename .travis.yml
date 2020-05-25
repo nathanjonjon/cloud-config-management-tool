@@ -32,9 +32,10 @@ jobs:
       script:
         - echo "test git commands"
         - git branch -a
+        - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
         - git checkout test
-        - git branch
+        - git branch -a
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push) and branch = master
