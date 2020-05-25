@@ -59,7 +59,7 @@ resource "aws_security_group" "db_sg" {
     description = "22 port"
     from_port   = 22
     to_port     = 22
-    protocol    = "tcp"
+    protocol    = "ssh"
     security_groups = [aws_security_group.web_sg.id]
   }
 

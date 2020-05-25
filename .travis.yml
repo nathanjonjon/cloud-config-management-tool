@@ -7,6 +7,7 @@ branches:
   only:
     - master
     - nathan
+    - dev
 
 # Export variables
 env:
@@ -26,7 +27,7 @@ jobs:
   include:
     - stage: terraform plan
       # Only run terraform validate and plan state if within a pull request
-      if: type IN (pull_request, api)
+      if: type IN (push) and branch = dev
       script:
         - echo "Executing Terraform Plan on pull request code"
         - echo "Validating Terraform fmt"
@@ -35,6 +36,12 @@ jobs:
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
+        - echo "dev is validated, start merging to master"
+        - git checkout nathan
+        - git pull origin dev
+        - git add .
+        - git commit -m "by travis"
+        - git push
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push) and (branch = nathan or branch = master)
