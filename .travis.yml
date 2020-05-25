@@ -1,5 +1,5 @@
 os: linux
-dist: bionic # Ubuntu 18.04
+dist: xenial # Ubuntu 16.04
 language: bash
 arch: arm64 # Architecture signifying a containerized version of Linux to boot faster
 # Only build pushes to master branch
@@ -11,9 +11,6 @@ branches:
 env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
-branches:
-  only:
-    - master
 
 # Install dependencies
 before_install:
