@@ -4,7 +4,6 @@ resource "aws_s3_bucket" "nextlink_s3" {
     versioning{ # 儲存多個版本號，若之後開發上遇到問題，可退回舊的版本
       enabled = true
     }
-    
     tags = {
         Name = "nextlink_bucket"
     }
