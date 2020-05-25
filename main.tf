@@ -55,7 +55,11 @@ resource "aws_route_table" "main-public-rtb" {
     Name = "main-public-rtb"
   }
 }
-
+resource "aws_route_table" "main-private-rtb" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "main-private-rtb"
+  }
 resource "aws_instance" "Nathan_WebServer" {
   # ami             = "ami-003634241a8fcdec0"
   ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
