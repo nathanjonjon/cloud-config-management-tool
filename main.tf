@@ -56,13 +56,6 @@ resource "aws_route_table" "main-public-rtb" {
   }
 }
 
-<<<<<<< HEAD
-resource "aws_route_table" "main-private-rtb" {
-  vpc_id = aws_vpc.main.id
-  tags = {
-    Name = "main-private-rtb"
-  }
-=======
 resource "aws_instance" "Nathan_WebServer" {
   # ami             = "ami-003634241a8fcdec0"
   ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
@@ -78,7 +71,6 @@ resource "aws_instance" "Nathan_WebServer" {
   #   user        = "ec2-user"
   #   private_key = file(var.aws_key_pair)
   # }
->>>>>>> 56110166105b5c3e8965d859ef0d1a67a9bdc939
 }
 
 # route associations public
