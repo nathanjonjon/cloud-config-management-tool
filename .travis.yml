@@ -34,30 +34,19 @@ jobs:
         - echo "Creating change plan"
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
-        - terraform plan $tf_plan_cli_options
+        # - terraform plan $tf_plan_cli_options
         - echo "Executing changes"
-        - terraform init $tf_init_cli_options
-        - terraform apply $tf_apply_cli_options
-        - terraform destroy -auto-approve
-        - echo "No error, infra destroyed completely"
-        - git add .
-        - git commit -m "commit automatically by travis in nathan"
-        - git push
-        - echo "push complete"
-        - echo "checkout to dev"
-        - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
-        - git fetch --all
-        - git checkout dev
-        - git pull origin nathan
-        - git add .
-        - git commit -m "commit automatically by travis in dev"
-        - git push 
+        # - terraform init $tf_init_cli_options
+        # - terraform apply $tf_apply_cli_options
+        # - terraform destroy -auto-approve
+        # - echo "No error, infra destroyed completely"
+        - ./merge.sh $USER_NAME $PASS_WORD
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push) and branch = dev
       script:
         - echo "hey!"
-        - terraform init $tf_init_cli_options
-        - terraform apply $tf_apply_cli_options
-        - terraform destroy -auto-approve
+        # - terraform init $tf_init_cli_options
+        # - terraform apply $tf_apply_cli_options
+        # - terraform destroy -auto-approve
         - echo "No error, infra destroyed completely"

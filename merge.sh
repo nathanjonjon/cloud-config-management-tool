@@ -9,13 +9,9 @@ GIT_USER="$1"
 GIT_PASS="$2"
 
 # Specify the development branch and stable branch names
-FROM_BRANCH="dev"
-TO_BRANCH="stable"
+FROM_BRANCH="nathan"
+TO_BRANCH="dev"
 
-# Get the current branch
-export PAGER=cat
-CURRENT_BRANCH=$(git log -n 1 --pretty=%d HEAD | cut -d"," -f3 | cut -d" " -f2 | cut -d")" -f1)
-echo "current branch is '$CURRENT_BRANCH'"
 
 # Create the URL to push merge to 
 URL=$(git remote -v | head -n1 | cut -f2 | cut -d" " -f1)
@@ -35,6 +31,8 @@ if [ "$CURRENT_BRANCH" = "$FROM_BRANCH" ] ; then
     echo "Merging changes..." && \
     git merge $FROM_BRANCH && \
 
+    git add .
+	git commit --allow-empty -m "please"
     # Push changes back to remote vcs
     echo "Pushing changes..." && \
     git push $PUSH_URL && \
