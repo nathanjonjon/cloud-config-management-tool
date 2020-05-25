@@ -6,5 +6,5 @@ variable "availability_zone" {
 }
 variable "key_name" {default = "nathan_east1_key"}
 variable "bucket_name" {
-  default = "nextlink_bucket"
+  default = "nextlink-bucket"
 }
