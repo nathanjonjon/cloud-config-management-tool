@@ -8,6 +8,7 @@ branches:
     - master
     - nathan
     - dev
+    - test
 
 # Export variables
 env:
