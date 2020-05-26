@@ -1,24 +1,19 @@
-os: linux
-dist: xenial # Ubuntu 16.04
-language: bash
+os: linux  # The default OS
+dist: bionic # Ubuntu 18.04
 arch: amd64 # Architecture signifying a containerized version of Linux to boot faster
+language: bash
 # Only build pushes to master branch
 branches:
   only:
     - master
     - nathan
-    - dev
-    - test
-    - new
 
 # Export variables
 env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
-echo "$TRAVIS_BRANCH"
 # Install dependencies
 # before_install:
-#   - sudo apt-get install -y -qq unzip
 #   - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
 #   - unzip terraform_"$tf_version"_linux_amd64.zip
 #   - sudo mv terraform /usr/local/bin/
@@ -28,36 +23,20 @@ echo "$TRAVIS_BRANCH"
 # Plan only on pull requests, Apply on merged code
 jobs:
   include:
-    - stage: greeting
-      # friendly greeting
-      if: type IN (push) and branch = nathan
+    - stage: terraform plan
+      # Only run terraform validate and plan state if within a pull request
+      if: type IN and branch = nathan
       script:
-        - echo "hi, nathan"
-    - stage: just test
-      # when test push, merge new with it
-      if: type IN (push) and branch = test
-      script:
-        - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
-        - git fetch --all
-        - git branch -a
-        - ./merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
-        -
-    - stage: terraform validate and apply
-      # Only run terraform apply stage if outside of a pull request
-      if: type IN (push) and branch = test
-      script:
-        - echo "you can do cool things here!"
-        # - git branch
+        - echo "Validating Terraform fmt"
+        # - terraform fmt -recursive -check
+        # - echo "Pull request detected, creating change plan"
         # - terraform init $tf_init_cli_options
-        # - terraform apply $tf_apply_cli_options
-        # - terraform destroy -auto-approve
-        # - echo "No error, infra destroyed completely"
-    # notifications:
-    #   webhooks:
-    #     urls:
-    #       - http://xx.xx.xx.xx/hooks/awx
-    #     on_success: always # default: always
-    #     on_failure: never # default: always
-    #     on_start:   never # default: never
-    #     on_cancel:  never # default: always
-    #     on_error:   never # default: always
+        # - terraform validate $tf_validation_cli_options
+        # - terraform plan $tf_plan_cli_options
+    - stage: terraform apply
+      # Only run terraform apply stage if outside of a pull request
+      if: type IN (push) and branch = master
+      script:
+        - echo "Merge detected, executing changes"
+        - terraform init $tf_init_cli_options
+        - terraform apply $tf_apply_cli_options
