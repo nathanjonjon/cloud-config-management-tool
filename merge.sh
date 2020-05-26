@@ -1,6 +1,6 @@
 #! /bin/bash
 # Merge pushes to development branch to stable branch
-if [ ! -n $2 ] ; then
+if [ ! -n $3 ] ; then
     echo "Usage: merge.sh <username> <password> <CURRENT_BRANCH>"
     exit 1;
 fi
