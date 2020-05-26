@@ -15,7 +15,7 @@ branches:
 env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
-echo "$TRAVIS_BRANCH"
+
 # Install dependencies
 # before_install:
 #   - sudo apt-get install -y -qq unzip
@@ -33,6 +33,7 @@ jobs:
       if: type IN (push) and branch = nathan
       script:
         - echo "hi, nathan"
+        - echo "$TRAVIS_BRANCH"
     - stage: just test
       # when test push, merge new with it
       if: type IN (push) and branch = test
