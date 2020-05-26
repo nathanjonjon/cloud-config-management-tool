@@ -19,16 +19,16 @@ resource "aws_subnet" "main-public" {
     Name = "main-public"
   }
 }
-# resource "aws_subnet" "main-private" {
-#   vpc_id                  = aws_vpc.main.id
-#   cidr_block              = "10.0.2.0/24" # 剩餘0~255的ip subnet可用
-#   map_public_ip_on_launch = "false"
-#   availability_zone       = var.availability_zone
+resource "aws_subnet" "main-private" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24" # 剩餘0~255的ip subnet可用
+  map_public_ip_on_launch = "false"
+  availability_zone       = var.availability_zone
 
-#   tags = {
-#     Name = "main-private"
-#   }
-# }
+  tags = {
+    Name = "main-private"
+  }
+}
 # ===========  # Internet Gateway =================
 resource "aws_internet_gateway" "main-igw" {
   vpc_id = aws_vpc.main.id
@@ -50,12 +50,12 @@ resource "aws_route_table" "main-public-rtb" {
   }
 }
 
-# resource "aws_route_table" "main-private-rtb" {
-#   vpc_id = aws_vpc.main.id
-#   tags = {
-#     Name = "main-private-rtb"
-#   }
-# }
+resource "aws_route_table" "main-private-rtb" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "main-private-rtb"
+  }
+}
 
 # route associations public
 resource "aws_route_table_association" "main-public-asso-rtb" {
@@ -63,7 +63,7 @@ resource "aws_route_table_association" "main-public-asso-rtb" {
   route_table_id = aws_route_table.main-public-rtb.id
 }
 
-# resource "aws_route_table_association" "main-private-asso-rtb" {
-#   subnet_id      = aws_subnet.main-private.id
-#   route_table_id = aws_route_table.main-private-rtb.id
-# }
+resource "aws_route_table_association" "main-private-asso-rtb" {
+  subnet_id      = aws_subnet.main-private.id
+  route_table_id = aws_route_table.main-private-rtb.id
+}

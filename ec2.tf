@@ -91,12 +91,12 @@ resource "aws_instance" "Nathan_WebServer" {
   # }
 }
 
-# resource "aws_instance" "Nathan_DB" {
-#   ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
-#   instance_type   = "t2.2xlarge"
-#   availability_zone = var.availability_zone
-#   key_name = var.key_name
-#   vpc_security_group_ids = [aws_security_group.db_sg.id]
-#   subnet_id = aws_subnet.main-private.id
-#   tags = {Name = "Nathan_DB", Owner = "Nathan"}
-# }
+resource "aws_instance" "Nathan_DB" {
+  ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
+  instance_type   = "t2.2xlarge"
+  availability_zone = var.availability_zone
+  key_name = var.key_name
+  vpc_security_group_ids = [aws_security_group.db_sg.id]
+  subnet_id = aws_subnet.main-private.id
+  tags = {Name = "Nathan_DB", Owner = "Nathan"}
+}

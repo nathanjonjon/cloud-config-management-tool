@@ -27,11 +27,6 @@ before_install:
 # Plan only on pull requests, Apply on merged code
 jobs:
   include:
-    # - stage: greeting
-    #   # friendly greeting
-    #   if: type IN (push)
-    #   script:
-    #     - echo "current branch is $TRAVIS_BRANCH"
     - stage: terraform validate
       if: type IN (push) and branch = nathan
       script:
@@ -51,17 +46,16 @@ jobs:
         - git fetch --all
         - git branch -a
         - ./merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
-    - stage: catch new change
-      # friendly greeting
-      if: type IN (push) and branch = new
-      script:
-        - echo "catch push by new"
-    # notifications:
-    #   webhooks:
-    #     urls:
-    #       - http://xx.xx.xx.xx/hooks/awx
-    #     on_success: always # default: always
-    #     on_failure: never # default: always
-    #     on_start:   never # default: never
-    #     on_cancel:  never # default: always
-    #     on_error:   never # default: always
+    # - stage: catch new change
+      # if: type IN (push) and branch = new
+      # script:
+      #   - echo "catch push by new"
+# notifications:
+#   webhooks:
+#     urls:
+#       - http://xx.xx.xx.xx/hooks/awx
+#     on_success: always # default: always
+#     on_failure: never # default: always
+#     on_start:   never # default: never
+#     on_cancel:  never # default: always
+#     on_error:   never # default: always
