@@ -27,14 +27,14 @@ before_install:
 # Plan only on pull requests, Apply on merged code
 jobs:
   include:
-    # - stage: just test
-    #   # when test push, merge new with it
-    #   if: type IN (push) and branch = test
-    #   script:
-    #     - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
-    #     - git fetch --all
-    #     - git branch -a
-    #     - ./merge.sh $USER_NAME $PASS_WORD test
+    - stage: just test
+      # when test push, merge new with it
+      if: type IN (push) and branch = test
+      script:
+        - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+        - git fetch --all
+        - git branch -a
+        - ./merge.sh $USER_NAME $PASS_WORD test
     - stage: terraform validate and apply
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push) and branch = nathan
