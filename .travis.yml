@@ -29,28 +29,33 @@ jobs:
   include:
     - stage: greeting
       # friendly greeting
+      if: type IN (push)
+      script:
+        - echo "current branch is $TRAVIS_BRANCH"
+    - stage: terraform validate
       if: type IN (push) and branch = nathan
       script:
-        - echo "$TRAVIS_BRANCH"
-    - stage: terraform validate and apply
-      # Only run terraform apply stage if outside of a pull request
-      if: type IN (push) and branch = nathan
-      script:
-        - echo "you can do cool things here!"
-        # - git branch
-        # - terraform init $tf_init_cli_options
-        # - terraform apply $tf_apply_cli_options
-        # - terraform destroy -auto-approve
-        # - echo "No error, infra destroyed completely"
+        - git branch
+        - terraform fmt -recursive -check
+        - terraform init $tf_init_cli_options
+        - terraform validate $tf_validation_cli_options
+        - terraform plan $tf_plan_cli_options
+        - terraform apply $tf_apply_cli_options
+        - terraform destroy -auto-approve
+        - echo "No error, infra destroyed completely"
     - stage: branch merge
       # when test push, merge new with it
-      if: type IN (push) and (branch = test or branch = master)
+      if: type IN (push) and (branch = test or branch = nathan)
       script:
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
         - git branch -a
         - ./merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
-    
+    - stage: catch new change
+      # friendly greeting
+      if: type IN (push) and branch = new
+      script:
+        - echo "catch push by new"
     # notifications:
     #   webhooks:
     #     urls:
