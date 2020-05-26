@@ -93,7 +93,7 @@ resource "aws_instance" "Nathan_WebServer" {
 
 resource "aws_instance" "Nathan_DB" {
   ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
-  instance_type   = "t2.2xlarge"
+  instance_type   = "t2.micro"
   availability_zone = var.availability_zone
   key_name = var.key_name
   vpc_security_group_ids = [aws_security_group.db_sg.id]
