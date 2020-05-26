@@ -27,16 +27,16 @@ before_install:
 # Plan only on pull requests, Apply on merged code
 jobs:
   include:
-    - stage: greeting
-      # friendly greeting
-      if: type IN (push)
-      script:
-        - echo "current branch is $TRAVIS_BRANCH"
+    # - stage: greeting
+    #   # friendly greeting
+    #   if: type IN (push)
+    #   script:
+    #     - echo "current branch is $TRAVIS_BRANCH"
     - stage: terraform validate
       if: type IN (push) and branch = nathan
       script:
         - git branch
-        - terraform fmt -recursive -check
+        # - terraform fmt -recursive -check
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
