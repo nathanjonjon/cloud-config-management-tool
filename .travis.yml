@@ -34,17 +34,29 @@ jobs:
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
         - git branch -a
-        - ./merge.sh $USER_NAME $PASS_WORD
-        -
+        - ./merge.sh $USER_NAME $PASS_WORD test
     - stage: terraform validate and apply
       # Only run terraform apply stage if outside of a pull request
-      if: type IN (push) and branch = dev
+      if: type IN (push) and branch = nathan
       script:
-        - git branch
+        - echo "Validating Terraform fmt"
+        - terraform fmt -recursive -check
+        - echo "Creating change plan"
         - terraform init $tf_init_cli_options
+        - terraform validate $tf_validation_cli_options
+        - terraform plan $tf_plan_cli_options
+        - echo "Executing changes"
         - terraform apply $tf_apply_cli_options
         - terraform destroy -auto-approve
         - echo "No error, infra destroyed completely"
+        - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+        - git fetch --all
+        - git branch -a
+        - ./merge.sh $USER_NAME $PASS_WORD nathan
+    - stage: catch push by new
+      if: type IN (push) and branch = new
+      script:
+        - echo "catch!"
     # notifications:
     #   webhooks:
     #     urls:
