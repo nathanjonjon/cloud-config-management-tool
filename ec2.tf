@@ -7,7 +7,7 @@ resource "aws_security_group" "web_sg" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = ["10.0.0.0/16", "220.133.223.215/32", "211.75.165.158/32"]
   }
 
   egress {
@@ -22,7 +22,7 @@ resource "aws_security_group" "web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16", "211.75.165.158/32", "220.133.223.215/32"]
+    cidr_blocks = ["10.0.0.0/16", "220.133.223.215/32", "211.75.165.158/32"]
   }
   egress {
     from_port   = 0
@@ -82,7 +82,7 @@ resource "aws_instance" "Nathan_WebServer" {
   subnet_id = aws_subnet.main-public.id
   tags = {Name = "Nathan_WebServer", Owner = "Nathan"}
   # connection { # Connect remote EC2
-  #   type        = "ssh"
+  #   type        = "tcp"
   #   host        = self.public_ip # bind public ip
   #   user        = "ec2-user"
   #   private_key = file(var.aws_key_pair)
