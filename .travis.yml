@@ -38,7 +38,7 @@ jobs:
         - terraform plan $tf_plan_cli_options
         - echo "Complete  terraform plan on pull request code!"
     - stage: terraform validate
-      if: type IN (push) and branch = tom
+      if: type IN (push) and (branch = nathan or branch = test)
       script:
         - git branch
         # - terraform fmt -recursive -check
@@ -50,7 +50,7 @@ jobs:
         - echo "No error, infra destroyed completely"
     - stage: branch merge
       # when test push, merge new with it
-      if: type IN (push) and (branch = nathan or branch = tom)
+      if: type IN (push) and (branch = nathan or branch = test)
       script:
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
