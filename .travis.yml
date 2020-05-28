@@ -9,8 +9,7 @@ branches:
     - nathan
     - dev
     - test
-    - new
-
+    
 # Export variables
 env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
@@ -46,10 +45,6 @@ jobs:
         - git fetch --all
         - git branch -a
         - ./merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
-    # - stage: catch new change
-      # if: type IN (push) and branch = new
-      # script:
-      #   - echo "catch push by new"
 # notifications:
 #   webhooks:
 #     urls:
