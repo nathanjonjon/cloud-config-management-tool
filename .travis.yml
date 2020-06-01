@@ -69,7 +69,7 @@ notifications:
     on_failure: always
   webhooks:
     urls:
-      - http://34.197.218.182:9000/hooks/awx
+      - http://"$awx_listener":9000/hooks/awx
     on_success: always # default: always
     on_failure: always # default: always
     on_start:   always # default: always
