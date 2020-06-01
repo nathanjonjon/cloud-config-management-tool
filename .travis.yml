@@ -40,8 +40,10 @@ jobs:
       if: type IN (push) and (branch = tom)
       script:
         - echo "installing dependency for project"
-        - pip3 install --upgrade pip 
+        - sudo apt-get install -y python3-pip
+        - pip3 install --upgrade pip
         # - pip3 install -r requirements.txt
+        - sudo pip3 install lxml
         - echo "Done!"
     - stage: terraform plan
      # Only run terraform validate and plan state if within a pull request
