@@ -1,0 +1,14 @@
+- name: install terraform
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: false
+  vars:
+    tf_version: 0.12.25
+  tasks:
+    - name: install
+      command: "{{ item }}"
+      with_items:
+        - curl -OL https://releases.hashicorp.com/terraform/"{{tf_version}}"/terraform_"{{tf_version}}"_linux_amd64.zip
+        - unzip terraform_"{{tf_version}}"_linux_amd64.zip
+        - mv terraform /usr/bin
+        - rm terraform_"{{tf_version}}"_linux_amd64.zip

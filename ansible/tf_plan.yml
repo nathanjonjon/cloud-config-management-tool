@@ -1,3 +1,6 @@
+- name: install terraform
+  import_playbook: install_tf.yml
+
 - name: terraform plan
   hosts: 127.0.0.1
   connection: local
@@ -9,10 +12,12 @@
       command:
         cmd: terraform init
         chdir: ../terraform/
+    - name: create planfile
+      file: path=../terraform/tfplan state=touch
     - name: plan
       terraform:
         project_path: ../terraform/
-        plan_file: ansible/tfplan
+        plan_file: tfplan
         lock: true
         state: planned
         variables:

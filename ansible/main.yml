@@ -1,3 +1,6 @@
+- name: install terraform
+  import_playbook: install_tf.yml
+
 - name: terraform apply
   hosts: 127.0.0.1
   connection: local
