@@ -41,7 +41,7 @@ jobs:
       script:
         - echo "installing dependency for project"
         - pip3 install --upgrade pip 
-        - pip3 install -r requirements.txt
+        # - pip3 install -r requirements.txt
         - echo "Done!"
     - stage: terraform plan
      # Only run terraform validate and plan state if within a pull request
