@@ -10,4 +10,4 @@ commit="$3"
 # Specify the development branch and stable branch names
 
 echo i am handsome
-curl -i -X POST -H 'Content-Type: application/json' -d '{"text": "current branch is '"$branch"'\n commit info is '"$commit"'"}' $mattermost_url
+curl -i -X POST -H 'Content-Type: application/json' -d '{"text": "current branch is '"$branch"'\ncommit id is '"$commit"'"}' $mattermost_url
