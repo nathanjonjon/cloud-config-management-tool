@@ -43,7 +43,8 @@ jobs:
         - sudo apt-get install -y python3-pip
         # - pip3 install --upgrade pip
         - python3 -m pip install --upgrade pip
-        # - sudo pip3 install -r requirements.txt
+        - pip3 --version
+        - sudo pip3 install -r requirements.txt
         - sudo pip3 install requests
         - sudo pip3 install lxml
         - echo "Done!"
