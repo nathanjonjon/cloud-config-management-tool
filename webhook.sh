@@ -9,4 +9,4 @@ branch="$2"
 # Specify the development branch and stable branch names
 
 echo i am handsome
-curl -i -X POST -H 'Content-Type: application/json' -d '{"text": "current branch is '"$branch"'"}' $mattermost_url
+curl -i -X POST -H 'Content-Type: application/json' -d '{"text": "我很抱歉，我會換頻道"}' $mattermost_url
