@@ -64,13 +64,13 @@ jobs:
       script:
         - echo "send notifications"
 notifications:
-email:
-  recipients:
-    - nathan.chang@nextlink.com.tw
-    - nathan_cona@yahoo.com.tw
-    - jenny.hong@nextlink.com.tw
-  on_success: always
-  on_failure: always
+  email:
+    recipients:
+      - nathan.chang@nextlink.com.tw
+      - nathan_cona@yahoo.com.tw
+      - jenny.hong@nextlink.com.tw
+    on_success: always
+    on_failure: always
         # webhooks:
         #   urls:
         #     - http://34.197.218.182:9000/hooks/awx
