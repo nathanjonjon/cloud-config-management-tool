@@ -63,6 +63,7 @@ jobs:
       if: type IN (push) and (branch = nathan or branch = test)
       script:
         - echo "send notifications"
+        - echo $awx_listener
         - ./webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
 notifications:
   email:
@@ -71,12 +72,12 @@ notifications:
       - jenny.hong@nextlink.com.tw
     on_success: always
     on_failure: always
-  webhooks:
-    urls:
-      - http://"$awx_listener":9000/hooks/awx
-    on_success: always # default: always
-    on_failure: never # default: always
-    on_start:   never # default: never
-    on_cancel:  never # default: always
-    on_error:   never # default: always
+  # webhooks:
+  #   urls:
+  #     - http://"$awx_listener":9000/hooks/awx
+  #   on_success: always # default: always
+  #   on_failure: never # default: always
+  #   on_start:   never # default: never
+  #   on_cancel:  never # default: always
+  #   on_error:   never # default: always
 
