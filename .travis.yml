@@ -39,6 +39,7 @@ jobs:
       if: type IN (push) and (branch = tom)
       script:
         - echo "installing dependency for project"
+        - pip install --upgrade pip
         - pip3 install -r requirements.txt
         - echo "Done!"
     - stage: terraform plan
