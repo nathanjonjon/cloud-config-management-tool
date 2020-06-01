@@ -12,9 +12,12 @@
       command:
         cmd: terraform init
         chdir: ../terraform/
+    - name: create planfile
+      file: path=../terraform/tfplan state=touch
     - name: apply
       terraform:
         project_path: ../terraform/
+        plan_file: tfplan
         lock: true
         state: present
         variables:
