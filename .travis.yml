@@ -26,7 +26,7 @@ before_install:
   - sudo apt-add-repository --yes ppa:ansible/ansible
   - sudo apt-get update
   - sudo apt-get install ansible
-  - ansible --version
+  - ansible --version 
 # Terraform Plan and Apply~~
 # Plan only on pull requests, Apply on merged code
 jobs:
