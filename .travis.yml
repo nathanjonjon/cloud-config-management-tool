@@ -69,6 +69,7 @@ notifications:
       - nathan.chang@nextlink.com.tw
       - nathan_cona@yahoo.com.tw
       - jenny.hong@nextlink.com.tw
+      - b05902112@ntu.edu.tw
     on_success: always
     on_failure: always
         # webhooks:
