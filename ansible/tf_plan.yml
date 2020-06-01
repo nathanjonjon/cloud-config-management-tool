@@ -1,0 +1,26 @@
+- name: install terraform
+  import_playbook: install_tf.yml
+
+- name: terraform plan
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: terraform init
+      command:
+        cmd: terraform init
+        chdir: ../terraform/
+    - name: create planfile
+      file: path=../terraform/tfplan state=touch
+    - name: plan
+      terraform:
+        project_path: ../terraform/
+        plan_file: tfplan
+        lock: true
+        state: planned
+        variables:
+          webserver_ip: "{{ webserver_ip }}"
+      tags:
+        - plan

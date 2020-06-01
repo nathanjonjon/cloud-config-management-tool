@@ -1,46 +1,84 @@
 os: linux
-dist: xenial # Ubuntu 16.04
+dist: bionic # Ubuntu 18.04
 language: bash
 arch: amd64 # Architecture signifying a containerized version of Linux to boot faster
 # Only build pushes to master branch
 branches:
   only:
     - master
-
+    - nathan
+    - dev
+    - test
+    - new
+    - tom
+    - oscar/ansible
 # Export variables
 env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
 # Install dependencies
 before_install:
-  - sudo apt-get install -y -qq unzip
   - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
   - unzip terraform_"$tf_version"_linux_amd64.zip
   - sudo mv terraform /usr/local/bin/
   - rm terraform_"$tf_version"_linux_amd64.zip
-
-# Terraform Plan and Apply
+  - sudo apt-get install software-properties-common
+  - sudo apt-add-repository --yes ppa:ansible/ansible
+  - sudo apt-get update
+  - sudo apt-get install ansible
+  - ansible --version 
+# Terraform Plan and Apply~~
 # Plan only on pull requests, Apply on merged code
 jobs:
   include:
     - stage: terraform plan
-      # Only run terraform validate and plan state if within a pull request
+     # Only run terraform validate and plan state if within a pull request
       if: type IN (pull_request, api)
       script:
         - echo "Executing Terraform Plan on pull request code"
-        - echo "Validating Terraform fmt"
-        - terraform fmt -recursive -check
-        - echo "Pull request detected, creating change plan"
+        - cd $TRAVIS_BUILD_DIR/terraform
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
-    - stage: terraform apply
-      # Only run terraform apply stage if outside of a pull request
-      if: type IN (push) and branch = master
+        - echo "Complete  terraform plan on pull request code!"
+    - stage: terraform validate
+      if: type IN (push) and (branch = test or branch = nathan)
       script:
-        - echo "Executing Terraform Apply on merged code"
-        - echo "Merge detected, executing changes"
+        - git branch
+        # - terraform fmt -recursive -check
+        - cd $TRAVIS_BUILD_DIR/terraform
         - terraform init $tf_init_cli_options
+        - terraform validate $tf_validation_cli_options
+        - terraform plan $tf_plan_cli_options
         - terraform apply $tf_apply_cli_options
         - terraform destroy -auto-approve
         - echo "No error, infra destroyed completely"
+    - stage: branch merge
+      # when test push, merge new with it
+      if: type IN (push) and (branch = test or branch = nathan)
+      script:
+        - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+        - git fetch --all
+        - git branch -a
+        - $TRAVIS_BUILD_DIR/merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
+    - stage: test notifications
+      if: type IN (push) and (branch = nathan or branch = test)
+      script:
+        - echo "send notifications"
+        - $TRAVIS_BUILD_DIR/webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
+notifications:
+  email:
+    recipients:
+      - nathan.chang@nextlink.com.tw
+      - jenny.hong@nextlink.com.tw
+    on_success: always
+    on_failure: always
+  webhooks:
+    urls:
+      - http://34.197.218.182:9000/hooks/awx
+    on_success: always # default: always
+    on_failure: never # default: always
+    on_start:   never # default: always
+    on_cancel:  never # default: always
+    on_error:   never # default: always
+
