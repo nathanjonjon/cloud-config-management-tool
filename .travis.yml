@@ -16,12 +16,12 @@ env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
 
-Install dependencies
-before_install:
-  - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
-  - unzip terraform_"$tf_version"_linux_amd64.zip
-  - sudo mv terraform /usr/local/bin/
-  - rm terraform_"$tf_version"_linux_amd64.zip
+# Install dependencies
+# before_install:
+#   - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+#   - unzip terraform_"$tf_version"_linux_amd64.zip
+#   - sudo mv terraform /usr/local/bin/
+#   - rm terraform_"$tf_version"_linux_amd64.zip
 
 # Terraform Plan and Apply~~
 # Plan only on pull requests, Apply on merged code
@@ -36,12 +36,8 @@ jobs:
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
         - echo "Complete  terraform plan on pull request code!"
-    #   notifications:
-    #     email:
-    #       - one@example.com
-    #       - other@example.com
     - stage: terraform validate
-      if: type IN (push) and (branch = test or branch = nathan)
+      if: type IN (push) and (branch = test)
       script:
         - git branch
         # - terraform fmt -recursive -check
@@ -53,7 +49,7 @@ jobs:
         - echo "No error, infra destroyed completely"
     - stage: branch merge
       # when test push, merge new with it
-      if: type IN (push) and (branch = test or branch = nathan)
+      if: type IN (push) and (branch = test)
       script:
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
@@ -63,7 +59,7 @@ jobs:
       if: type IN (push) and (branch = nathan or branch = test)
       script:
         - echo "send notifications"
-        # - echo $awx_listener
+        - echo $awx_listener
         - ./webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
 notifications:
   email:
