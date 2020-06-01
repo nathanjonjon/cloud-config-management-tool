@@ -1,5 +1,5 @@
 os: linux
-dist: xenial # Ubuntu 16.04
+dist: bionic # Ubuntu 18.04
 language: bash
 arch: amd64 # Architecture signifying a containerized version of Linux to boot faster
 # Only build pushes to master branch
@@ -26,6 +26,7 @@ before_install:
   - sudo apt-add-repository --yes ppa:ansible/ansible
   - sudo apt-get update
   - sudo apt-get install ansible
+  - ansible --version
 # Terraform Plan and Apply~~
 # Plan only on pull requests, Apply on merged code
 jobs:
