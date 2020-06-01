@@ -16,12 +16,12 @@ env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
 
-# Install dependencies
-# before_install:
-#   - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
-#   - unzip terraform_"$tf_version"_linux_amd64.zip
-#   - sudo mv terraform /usr/local/bin/
-#   - rm terraform_"$tf_version"_linux_amd64.zip
+Install dependencies
+before_install:
+  - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+  - unzip terraform_"$tf_version"_linux_amd64.zip
+  - sudo mv terraform /usr/local/bin/
+  - rm terraform_"$tf_version"_linux_amd64.zip
 
 # Terraform Plan and Apply~~
 # Plan only on pull requests, Apply on merged code
@@ -41,7 +41,7 @@ jobs:
     #       - one@example.com
     #       - other@example.com
     - stage: terraform validate
-      if: type IN (push) and (branch = test)
+      if: type IN (push) and (branch = test or branch = nathan)
       script:
         - git branch
         # - terraform fmt -recursive -check
@@ -53,14 +53,14 @@ jobs:
         - echo "No error, infra destroyed completely"
     - stage: branch merge
       # when test push, merge new with it
-      if: type IN (push) and (branch = test)
+      if: type IN (push) and (branch = test or branch = nathan)
       script:
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
         - git branch -a
         - ./merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
     - stage: test notifications
-      if: type IN (push) and (branch = nathan)
+      if: type IN (push) and (branch = nathan or branch = test)
       script:
         - echo "send notifications"
         - ./webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
@@ -71,12 +71,12 @@ notifications:
       - jenny.hong@nextlink.com.tw
     on_success: always
     on_failure: always
-  # webhooks:
-  #   urls:
-  #     - http://34.197.218.182:9000/hooks/awx
-  #   on_success: always # default: always
-  #   on_failure: never # default: always
-  #   on_start:   never # default: never
-  #   on_cancel:  never # default: always
-  #   on_error:   never # default: always
+  webhooks:
+    urls:
+      - http://"$awx_listener":9000/hooks/awx
+    on_success: always # default: always
+    on_failure: never # default: always
+    on_start:   never # default: never
+    on_cancel:  never # default: always
+    on_error:   never # default: always
 
