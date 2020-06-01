@@ -67,6 +67,7 @@ jobs:
         email:
           recipients:
             - nathan.chang@nextlink.com.tw
+            - nathan_cona@yahoo.com.tw
           on_success: always
           on_failure: always
         webhooks:
