@@ -64,7 +64,7 @@ jobs:
         - git branch -a
         - $TRAVIS_BUILD_DIR/merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
     - stage: test notifications
-      if: type IN (push) and (branch = nathan or branch = test or branch = master)
+      if: type IN (push) and (branch = nathan or branch = test or branch = oscar/ansible)
       script:
         - echo "send notifications"
         # - $TRAVIS_BUILD_DIR/webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
