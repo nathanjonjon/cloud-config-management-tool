@@ -61,7 +61,18 @@ jobs:
         - ./merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
       notifications:
         email:
-          - nathan.chang@nextlink.com.tw
+          recipients:
+            - nathan.chang@nextlink.com.tw
+          on_success: always
+          on_failure: always
+        webhooks:
+          urls:
+            - 34.197.218.182:9000
+          on_success: always # default: always
+          on_failure: never # default: always
+          on_start:   never # default: never
+          on_cancel:  never # default: always
+          on_error:   never # default: always
 # notifications:
 #   webhooks:
 #     urls:
