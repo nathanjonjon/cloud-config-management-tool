@@ -63,29 +63,21 @@ jobs:
       if: type IN (push) and (branch = nathan)
       script:
         - echo "send notifications"
-          notifications:
-            email:
-              recipients:
-                - nathan.chang@nextlink.com.tw
-                - nathan_cona@yahoo.com.tw
-                - jenny.hong@nextlink.com.tw
-              on_success: always
-              on_failure: always
-        webhooks:
-          urls:
-            - http://34.197.218.182:9000/hooks/awx
-            - https://mattermost.nextlink.technology/hooks/fea4je9g6tnw98c7z5phj7ofyh
-          on_success: always # default: always
-          on_failure: never # default: always
-          on_start:   never # default: never
-          on_cancel:  never # default: always
-          on_error:   never # default: always
-# notifications:
-#   webhooks:
-#     urls:
-#       - http://xx.xx.xx.xx/hooks/awx
-#     on_success: always # default: always
-#     on_failure: never # default: always
-#     on_start:   never # default: never
-#     on_cancel:  never # default: always
-#     on_error:   never # default: always
+notifications:
+email:
+  recipients:
+    - nathan.chang@nextlink.com.tw
+    - nathan_cona@yahoo.com.tw
+    - jenny.hong@nextlink.com.tw
+  on_success: always
+  on_failure: always
+        # webhooks:
+        #   urls:
+        #     - http://34.197.218.182:9000/hooks/awx
+        #     - https://mattermost.nextlink.technology/hooks/fea4je9g6tnw98c7z5phj7ofyh
+        #   on_success: always # default: always
+        #   on_failure: never # default: always
+        #   on_start:   never # default: never
+        #   on_cancel:  never # default: always
+        #   on_error:   never # default: always
+
