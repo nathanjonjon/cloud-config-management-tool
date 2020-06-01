@@ -67,7 +67,7 @@ jobs:
           on_failure: always
         webhooks:
           urls:
-            - 34.197.218.182:9000
+            - http://34.197.218.182:9000/hooks/awx
           on_success: always # default: always
           on_failure: never # default: always
           on_start:   never # default: never
