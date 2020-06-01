@@ -63,7 +63,7 @@ jobs:
       if: type IN (push) and (branch = nathan)
       script:
         - echo "send notifications"
-        - ./webhook.sh $mattermost_url
+        - ./webhook.sh $mattermost_url $TRAVIS_BRANCH
 notifications:
   email:
     recipients:
