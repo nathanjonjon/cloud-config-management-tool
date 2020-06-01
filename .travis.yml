@@ -36,6 +36,10 @@ jobs:
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
         - echo "Complete  terraform plan on pull request code!"
+    #   notifications:
+    #     email:
+    #       - one@example.com
+    #       - other@example.com
     - stage: terraform validate
       if: type IN (push) and (branch = nathan or branch = test)
       script:
@@ -55,6 +59,9 @@ jobs:
         - git fetch --all
         - git branch -a
         - ./merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
+      notifications:
+        email:
+          - nathan.chang@nextlink.com.tw
 # notifications:
 #   webhooks:
 #     urls:
