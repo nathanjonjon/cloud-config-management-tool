@@ -17,11 +17,11 @@ env:
 
 
 # Install dependencies
-# before_install:
-#   - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
-#   - unzip terraform_"$tf_version"_linux_amd64.zip
-#   - sudo mv terraform /usr/local/bin/
-#   - rm terraform_"$tf_version"_linux_amd64.zip
+before_install:
+  - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+  - unzip terraform_"$tf_version"_linux_amd64.zip
+  - sudo mv terraform /usr/local/bin/
+  - rm terraform_"$tf_version"_linux_amd64.zip
 
 # Terraform Plan and Apply~~
 # Plan only on pull requests, Apply on merged code
@@ -37,7 +37,7 @@ jobs:
         - terraform plan $tf_plan_cli_options
         - echo "Complete  terraform plan on pull request code!"
     - stage: terraform validate
-      if: type IN (push) and (branch = test)
+      if: type IN (push) and (branch = test or branch = nathan)
       script:
         - git branch
         # - terraform fmt -recursive -check
@@ -49,7 +49,7 @@ jobs:
         - echo "No error, infra destroyed completely"
     - stage: branch merge
       # when test push, merge new with it
-      if: type IN (push) and (branch = test)
+      if: type IN (push) and (branch = test or branch = nathan)
       script:
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
@@ -59,17 +59,17 @@ jobs:
       if: type IN (push) and (branch = nathan or branch = test)
       script:
         - echo "send notifications"
-        # - ./webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
+        - ./webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
 notifications:
   email:
     recipients:
-      - b05902112@ntu.edu.com.tw
+      - nathan.chang@nextlink.com.tw
       - jenny.hong@nextlink.com.tw
     on_success: always
     on_failure: always
   webhooks:
     urls:
-      - http://"$awx_listener":9000/hooks/awx
+      - http://34.197.218.182:9000/hooks/awx
     on_success: always # default: always
     on_failure: always # default: always
     on_start:   always # default: always
