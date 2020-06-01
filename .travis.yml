@@ -36,12 +36,8 @@ jobs:
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
         - echo "Complete  terraform plan on pull request code!"
-    #   notifications:
-    #     email:
-    #       - one@example.com
-    #       - other@example.com
     - stage: terraform validate
-      if: type IN (push) and (branch = test)
+      if: type IN (push) and (branch = test or branch = nathan)
       script:
         - git branch
         # - terraform fmt -recursive -check
@@ -53,17 +49,17 @@ jobs:
         - echo "No error, infra destroyed completely"
     - stage: branch merge
       # when test push, merge new with it
-      if: type IN (push) and (branch = test)
+      if: type IN (push) and (branch = test or branch = nathan)
       script:
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
         - git branch -a
         - ./merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
     - stage: test notifications
-      if: type IN (push) and (branch = nathan)
+      if: type IN (push) and (branch = nathan or branch = test)
       script:
         - echo "send notifications"
-        - ./webhook.sh $mattermost_url
+        - ./webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
 notifications:
   email:
     recipients:
@@ -71,6 +67,12 @@ notifications:
       - jenny.hong@nextlink.com.tw
     on_success: always
     on_failure: always
-  # webhooks:
-
+  webhooks:
+    urls:
+      - http://34.197.218.182:9000/hooks/awx
+    on_success: always # default: always
+    on_failure: always # default: always
+    on_start:   always # default: always
+    on_cancel:  always # default: always
+    on_error:   always # default: always
 
