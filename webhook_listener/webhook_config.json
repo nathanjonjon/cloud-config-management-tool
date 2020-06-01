@@ -11,8 +11,18 @@
         "pass-environment-to-command": [
             {
                 "source": "payload",
-                "name": "payload.repository",
-                "envname": "payload"
+                "name": "payload.state",
+                "envname": "repository"
+            },
+            {
+                "source": "payload",
+                "name": "payload.type",
+                "envname": "type"
+            },
+            {
+                "source": "payload",
+                "name": "payload.branch",
+                "envname": "branch"
             }
         ],
         "pass-arguments-to-command": [
@@ -60,6 +70,16 @@
                             }
                         }
                     ]
+                },
+                {
+                    "match": {
+                        "type": "value",
+                        "value": "push",
+                        "parameter": {
+                            "name": "payload.type",
+                            "source": "payload"
+                        }
+                    }
                 }
             ]
         }
