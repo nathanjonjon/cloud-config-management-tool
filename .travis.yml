@@ -23,7 +23,7 @@ before_install:
   - sudo mv terraform /usr/local/bin/
   - rm terraform_"$tf_version"_linux_amd64.zip
   - sudo apt-get install software-properties-common
-  - sudo apt-add-repository ppa:ansible/ansible
+  - sudo apt-add-repository --yes ppa:ansible/ansible
   - sudo apt-get update
   - sudo apt-get install ansible
 # Terraform Plan and Apply~~
