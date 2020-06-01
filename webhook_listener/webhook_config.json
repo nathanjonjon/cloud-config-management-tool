@@ -1,0 +1,67 @@
+[
+    {
+        "id": "awx",
+        "execute-command": "/home/ubuntu/command/script.sh",
+        "parse-parameters-as-json": [
+            {
+                "source": "payload",
+                "name": "payload"
+            }
+        ],
+        "pass-environment-to-command": [
+            {
+                "source": "payload",
+                "name": "payload.repository",
+                "envname": "payload"
+            }
+        ],
+        "pass-arguments-to-command": [
+            {
+                "source": "payload",
+                "name": "payload.repository.name"
+            },
+            {
+                "source": "payload",
+                "name": "payload.repository.owner_name"
+            }
+        ],
+        "trigger-rule": {
+            "and": [
+                {
+                    "match": {
+                        "type": "value",
+                        "value": "passed",
+                        "parameter": {
+                            "name": "payload.state",
+                            "source": "payload"
+                        }
+                    }
+                },
+                {
+                    "or": [
+                        {
+                            "match": {
+                                "type": "value",
+                                "value": "master",
+                                "parameter": {
+                                    "name": "payload.branch",
+                                    "source": "payload"
+                                }
+                            }
+                        },
+                        {
+                            "match": {
+                                "type": "value",
+                                "value": "oscar/ansible",
+                                "parameter": {
+                                    "name": "payload.branch",
+                                    "source": "payload"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
