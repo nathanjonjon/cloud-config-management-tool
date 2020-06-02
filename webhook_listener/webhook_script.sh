@@ -9,7 +9,7 @@ project_id=$(curl -XGET \
 
 template_id=$(curl -XGET \
     -u admin:password \
-    "http://0.0.0.0/api/v2/job_templates/?project=$project_id&name=plan_nextlinker_cmdb" 2>/dev/null | jq -r '.results[0].id')
+    "http://0.0.0.0/api/v2/job_templates/?project=$project_id&name=deploy nextlinker_cmdb" 2>/dev/null | jq -r '.results[0].id')
 
 echo $project_id
 echo $template_id

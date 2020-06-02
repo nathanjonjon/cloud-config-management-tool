@@ -5,6 +5,10 @@
   vars_files:
     - vars.yml
   tasks:
+    - name: terraform init
+      command:
+        cmd: terraform init
+        chdir: ../terraform/
     - name: destroy
       terraform:
         project_path: ../terraform/
