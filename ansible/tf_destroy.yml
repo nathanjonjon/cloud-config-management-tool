@@ -9,6 +9,16 @@
       command:
         cmd: terraform init
         chdir: ../terraform/
+    - name: plan
+      terraform:
+        project_path: ../terraform/
+        plan_file: tfplan
+        lock: true
+        state: planned
+        variables:
+          webserver_ip: "{{ webserver_ip }}"
+      tags:
+        - plan
     - name: destroy
       terraform:
         project_path: ../terraform/
