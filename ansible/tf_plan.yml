@@ -22,7 +22,6 @@
           region: "us-east-1"
           bucket: "awx-nextlinker-cmdb"
           key: "terraform.tfstate"
-        lock: true
         state: planned
         variables:
           webserver_ip: "{{ webserver_ip }}"

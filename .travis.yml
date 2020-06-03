@@ -17,18 +17,18 @@ env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
 # Install dependencies
-before_install:
-  - mkdir $TRAVIS_BUILD_DIR/install
-  - cd $TRAVIS_BUILD_DIR/install
-  - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
-  - unzip terraform_"$tf_version"_linux_amd64.zip
-  - sudo mv terraform /usr/local/bin/
-  - rm terraform_"$tf_version"_linux_amd64.zip
-  - sudo apt-get install software-properties-common
-  - sudo apt-add-repository --yes ppa:ansible/ansible
-  - sudo apt-get update
-  - sudo apt-get install ansible
-  - ansible --version
+# before_install:
+#   - mkdir $TRAVIS_BUILD_DIR/install
+#   - cd $TRAVIS_BUILD_DIR/install
+#   - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+#   - unzip terraform_"$tf_version"_linux_amd64.zip
+#   - sudo mv terraform /usr/local/bin/
+#   - rm terraform_"$tf_version"_linux_amd64.zip
+#   - sudo apt-get install software-properties-common
+#   - sudo apt-add-repository --yes ppa:ansible/ansible
+#   - sudo apt-get update
+#   - sudo apt-get install ansible
+#   - ansible --version
 # Terraform Plan and Apply~~
 # Plan only on pull requests, Apply on merged code
 jobs:
@@ -80,7 +80,6 @@ notifications:
       - http://34.197.218.182:9000/hooks/awx
     on_success: always # default: always
     on_failure: never # default: always
-    on_start: never # default: always
-    on_cancel: never # default: always
-    on_error: never # default: always
-
+    on_start:   never # default: never
+    on_cancel:  never # default: always
+    on_error:   never # default: always

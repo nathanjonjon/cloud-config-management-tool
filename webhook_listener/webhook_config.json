@@ -2,6 +2,9 @@
     {
         "id": "awx",
         "execute-command": "/home/ubuntu/command/script.sh",
+        "http-methods": [
+            "POST"
+        ],
         "parse-parameters-as-json": [
             {
                 "source": "payload",
