@@ -11,6 +11,7 @@
     #     chdir: ../terraform/
     - name: destroy
       terraform:
+        force_init: "{{ force_init }}"
         project_path: ../terraform/
         backend_config:
           region: "us-east-1"
