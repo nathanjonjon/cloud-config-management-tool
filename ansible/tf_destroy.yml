@@ -5,23 +5,17 @@
   vars_files:
     - vars.yml
   tasks:
-    - name: terraform init
-      command:
-        cmd: terraform init
-        chdir: ../terraform/
-    - name: plan
-      terraform:
-        project_path: ../terraform/
-        plan_file: tfplan
-        lock: true
-        state: planned
-        variables:
-          webserver_ip: "{{ webserver_ip }}"
-      tags:
-        - plan
+    # - name: terraform init
+    #   command:
+    #     cmd: terraform init
+    #     chdir: ../terraform/
     - name: destroy
       terraform:
         project_path: ../terraform/
+        backend_config:
+          region: "us-east-1"
+          bucket: "awx-nextlinker-cmdb"
+          key: "terraform.tfstate"
         lock: true
         state: absent
         variables:

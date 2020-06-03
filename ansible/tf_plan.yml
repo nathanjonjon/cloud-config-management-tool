@@ -18,6 +18,10 @@
       terraform:
         project_path: ../terraform/
         plan_file: tfplan
+        backend_config:
+          region: "us-east-1"
+          bucket: "awx-nextlinker-cmdb"
+          key: "terraform.tfstate"
         lock: true
         state: planned
         variables:

@@ -12,7 +12,7 @@
             {
                 "source": "payload",
                 "name": "payload.state",
-                "envname": "repository"
+                "envname": "state"
             },
             {
                 "source": "payload",
