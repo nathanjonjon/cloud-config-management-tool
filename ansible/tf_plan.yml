@@ -8,10 +8,13 @@
   vars_files:
     - vars.yml
   tasks:
+    - name: create planfile
+      file: path=../terraform/tfplan state=touch
     - name: plan
       terraform:
         force_init: "{{ force_init }}"
         project_path: ../terraform/
+        plan_file: tfplan
         backend_config:
           region: "us-east-1"
           bucket: "awx-nextlinker-cmdb"
