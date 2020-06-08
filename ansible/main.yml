@@ -28,10 +28,6 @@
           }
     - name: create plan file
       file: path=../terraform/tfplan state=touch
-    - name: ls
-      command: ls "{{ plugin_dir }}"
-      register: out
-    - debug: var=out
     - name: "{{ terraform_action }}"
       terraform:
         force_init: "{{ force_init }}"
