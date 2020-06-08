@@ -21,6 +21,16 @@
         remote_src: yes
     - name: create plan file
       file: path=../terraform/tfplan state=touch
+    - name: ls
+      find:
+        paths:
+          - ../terraform/.terraform
+          - ../terraform/.terraform/plugins
+          - ../terraform/.terraform/plugins/linux_amd64
+        recurse: yes
+      register: out
+    - debug: out
+    
     - name: "{{ terraform_action }}"
       terraform:
         force_init: "{{ force_init }}"
