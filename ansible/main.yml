@@ -8,7 +8,7 @@
   vars_files:
     - vars.yml
   vars:
-    plugin_dir: ~/.terraform.d/plugins/linux_amd64
+    plugin_dir: /root/.terraform.d/plugins/linux_amd64
   tasks:
     - name: ensure .terraform dir exists
       file:
