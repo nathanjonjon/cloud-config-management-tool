@@ -19,10 +19,13 @@
         dest: "{{ plugin_dir }}"
         src: https://releases.hashicorp.com/terraform-provider-aws/2.65.0/terraform-provider-aws_2.65.0_linux_amd64.zip
         remote_src: yes
+    - name: create plan file
+      file: path=../terraform/tfplan state=touch
     - name: "{{ terraform_action }}"
       terraform:
         force_init: "{{ force_init }}"
         project_path: ../terraform/ # required
+        plan_file: tfplan
         backend_config:
           region: "us-east-1"
           bucket: "awx-nextlinker-cmdb"
