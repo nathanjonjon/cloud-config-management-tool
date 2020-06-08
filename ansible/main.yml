@@ -17,7 +17,7 @@
     - name: downloading terraform packages
       unarchive:
         dest: "{{ plugin_dir }}"
-        src: https://releases.hashicorp.com/terraform-provider-aws/2.65.0/terraform-provider-aws_2.65.0_linux_amd64.zip
+        src: https://releases.hashicorp.com/terraform-provider-aws/2.55.0/terraform-provider-aws_2.55.0_linux_amd64.zip
         remote_src: yes
     - name: create plan file
       file: path=../terraform/tfplan state=touch
