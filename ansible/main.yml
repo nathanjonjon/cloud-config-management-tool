@@ -8,7 +8,7 @@
   vars_files:
     - vars.yml
   vars:
-    plugin_dir: /root/.terraform.d/plugins/linux_amd64
+    plugin_dir: ../terraform/.terraform/plugins/linux_amd64
   tasks:
     - name: ensure .terraform dir exists
       file:
@@ -16,23 +16,16 @@
         state: directory
     - name: downloading terraform packages
       unarchive:
-        dest: "{{ plugin_dir }}"
+        dest: "{{ plugin_dir }}/terraform-provider-aws_v2.65.0"
         src: https://releases.hashicorp.com/terraform-provider-aws/2.65.0/terraform-provider-aws_2.65.0_linux_amd64.zip
         remote_src: yes
-    - name: create lock.json
-      copy:
-        dest: "{{ plugin_dir }}/lock.json"
-        content: |
-          {
-          \t"aws": "cd3505dd3babc602e7ebfc84522494a3b924f114b6b71ff6ac25f9101d4b3cc1"
-          }
     - name: create plan file
       file: path=../terraform/tfplan state=touch
     - name: "{{ terraform_action }}"
       terraform:
         force_init: "{{ force_init }}"
         project_path: ../terraform/ # required
-        plan_file: tfplan
+        # plan_file: tfplan
         backend_config:
           region: "us-east-1"
           bucket: "awx-nextlinker-cmdb"
