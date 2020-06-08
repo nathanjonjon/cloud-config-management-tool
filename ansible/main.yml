@@ -38,3 +38,7 @@
         state: "{{ terraform_state }}" # present, absent, planned
         variables:
           webserver_ip: "{{ webserver_ip }}"
+    - name: ls
+      command: ls ../terraform/.terraform/plugins/linux_amd64
+      register: out
+    - debug: var=out
