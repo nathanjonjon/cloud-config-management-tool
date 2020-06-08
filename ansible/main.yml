@@ -29,7 +29,7 @@
           - ../terraform/.terraform/plugins/linux_amd64
         recurse: yes
       register: out
-    - debug: out
+    - debug: var=out
     
     - name: "{{ terraform_action }}"
       terraform:
