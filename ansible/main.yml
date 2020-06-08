@@ -7,7 +7,18 @@
   gather_facts: false
   vars_files:
     - vars.yml
+  vars:
+    plugin_dir: ../terraform/.terraform/plugins/linux_amd64
   tasks:
+    - name: ensure .terraform dir exists
+      file:
+        path: "{{ plugin_dir }}"
+        state: directory
+    - name: downloading terraform packages
+      unarchive:
+        dest: "{{ plugin_dir }}"
+        src: https://releases.hashicorp.com/terraform-provider-aws/2.65.0/terraform-provider-aws_2.65.0_linux_amd64.zip
+        remote_src: yes
     - name: "{{ terraform_action }}"
       terraform:
         force_init: "{{ force_init }}"
