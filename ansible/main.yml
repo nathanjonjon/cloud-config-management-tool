@@ -29,7 +29,7 @@
     - name: create plan file
       file: path=../terraform/tfplan state=touch
     - name: ls
-      command: ls ../terraform/.terraform/plugins/linux_amd64
+      command: ls "{{ plugin_dir }}"
       register: out
     - debug: var=out
     - name: "{{ terraform_action }}"
