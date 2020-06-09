@@ -8,25 +8,10 @@
   vars_files:
     - vars.yml
   tasks:
-    - name: create plan file
-      file: path=../terraform/tfplan state=touch
-    - name: plan
-      terraform:
-        force_init: "{{ force_init }}"
-        project_path: ../terraform/ # required
-        plan_file: tfplan
-        backend_config:
-          region: "us-east-1"
-          bucket: "awx-nextlinker-cmdb"
-          key: "terraform.tfstate"
-        state: planned # present, absent, planned
-        variables:
-          webserver_ip: "{{ webserver_ip }}"
     - name: apply
       terraform:
         force_init: "{{ force_init }}"
         project_path: ../terraform/ # required
-        plan_file: tfplan
         backend_config:
           region: "us-east-1"
           bucket: "awx-nextlinker-cmdb"
