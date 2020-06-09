@@ -26,6 +26,7 @@
       terraform:
         force_init: "{{ force_init }}"
         project_path: ../terraform/ # required
+        plan_file: tfplan
         backend_config:
           region: "us-east-1"
           bucket: "awx-nextlinker-cmdb"
