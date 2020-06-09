@@ -22,3 +22,4 @@ curl -qsOL -XPOST -H "Content-type: application/json" \
     --data '{}' \
     -u admin:password  \
     http://0.0.0.0/api/v2/workflow_job_templates/$workflow_id/launch
+#######
