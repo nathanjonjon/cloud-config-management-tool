@@ -7,10 +7,12 @@
   tasks:
     - name: destroy
       terraform:
+        force_init: "{{ force_init }}"
         project_path: ../terraform/
-        lock: true
+        backend_config:
+          region: "us-east-1"
+          bucket: "awx-nextlinker-cmdb"
+          key: "terraform.tfstate"
         state: absent
         variables:
           webserver_ip: "{{ webserver_ip }}"
-      tags:
-        - destroy

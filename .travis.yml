@@ -57,22 +57,23 @@ jobs:
         - echo "No error, infra destroyed completely"
     - stage: branch merge
       # when test push, merge new with it
-      if: type IN (push) and (branch = test or branch = nathan)
+      if: type IN (push) and (branch = test or branch = nathan or branch=master)
       script:
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
         - git branch -a
         - $TRAVIS_BUILD_DIR/merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
     - stage: test notifications
-      if: type IN (push) and (branch = nathan or branch = test or branch = master)
+      if: type IN (push) and (branch = nathan or branch = test or branch=master)
       script:
         - echo "send notifications"
         - $TRAVIS_BUILD_DIR/webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
 notifications:
   email:
     recipients:
-      - nathan.chang@nextlink.com.tw
-      - jenny.hong@nextlink.com.tw
+      # - nathan.chang@nextlink.com.tw
+      # - jenny.hong@nextlink.com.tw
+      - oscar.tseng@nextlink.com.tw
     on_success: always
     on_failure: always
   webhooks:
@@ -80,7 +81,6 @@ notifications:
       - http://34.197.218.182:9000/hooks/awx
     on_success: always # default: always
     on_failure: never # default: always
-    on_start: never # default: always
-    on_cancel: never # default: always
-    on_error: never # default: always
-
+    on_start:   never # default: never
+    on_cancel:  never # default: always
+    on_error:   never # default: always
