@@ -7,12 +7,10 @@
   gather_facts: false
   vars_files:
     - vars.yml
-  vars:
-    plugin_dir: ../terraform/.terraform/plugins/linux_amd64
   tasks:
     - name: create plan file
       file: path=../terraform/tfplan state=touch
-    - name: "{{ terraform_action }}"
+    - name: plan
       terraform:
         force_init: "{{ force_init }}"
         project_path: ../terraform/ # required
