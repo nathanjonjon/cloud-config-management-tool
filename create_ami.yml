@@ -1,0 +1,38 @@
+
+
+---
+- hosts: local
+  connection: local
+  gather_facts: False
+  vars:
+    instance_type: t2.micro
+    image: ami-db710fa3
+    security_group: webservers_sg
+    keypair: nathan_try
+    region: us-west-2
+    count: 1
+  tasks:
+      - name: h
+        ec2_instance_info:
+          region: "{{ region }}"
+          filters:
+            {"tag:specialKey": "true", instance-state-name: [ "running" ]}
+        register: test
+      - debug: var=test
+      - local_action: copy content={{ test }} dest=./output.json
+      - command: "aws s3 cp ./output.json s3://test-nathan-5-14/ --grants full=uri=http://acs.amazonaws.com/groups/global/AllUsers"
+      - name: create ami
+        ec2_ami:
+        instance_id: "{{ db_instance_id.txt }}"
+        state: present
+        name: newtest
+        wait: no
+        architecture: amd
+        virtualization_type: hvm
+        root_device_name: /dev/xvda
+        device_mapping:
+            - device_name: /dev/xvda
+              size: 10
+              delete_on_termination: true
+              volume_type: gp2
+                                                                                                         21,130        All

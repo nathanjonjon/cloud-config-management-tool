@@ -1,0 +1,55 @@
+---
+- name: create web instances
+  import_playbook: web_create_ec2.yml
+- name: create db instances  
+  import_playbook: db_create_ec2.yml
+- hosts: local
+  connection: local
+  gather_facts: False
+  vars:
+    region: us-west-2
+
+  tasks:
+      - name: verify ec2 info
+        ec2_instance_info:
+          region: "{{ region }}"
+          filters:
+            instance-state-name: [ "running" ]
+        register: test
+      - debug: msg="{{ test }}"
+        
+      - name: create db ami
+        ec2_ami:
+          instance_id: "{{lookup('file', './db_instance_id.txt')}}"
+          state: present
+          name: Nathan_db_ami
+          wait: no
+          region: "{{ region }}"
+          architecture: amd
+          virtualization_type: hvm
+          root_device_name: /dev/xvda
+          device_mapping:
+            - device_name: /dev/xvda
+              size: 10
+              delete_on_termination: true
+              volume_type: gp2
+        register: db_ami
+      - debug: msg="{{ db_ami }}"
+
+      - name: create web ami
+        ec2_ami:
+          instance_id: "{{lookup('file', './web_instance_id.txt')}}"
+          state: present
+          name: Nathan_web_ami
+          wait: no
+          region: "{{ region }}"
+          architecture: amd
+          virtualization_type: hvm
+          root_device_name: /dev/xvda
+          device_mapping:
+            - device_name: /dev/xvda
+              size: 8
+              delete_on_termination: true
+              volume_type: gp2
+        register: web_ami
+      - debug: msg="{{ web_ami }}"
