@@ -10,22 +10,10 @@
   vars:
     plugin_dir: ../terraform/.terraform/plugins/linux_amd64
   tasks:
-    # - name: ensure .terraform dir exists
-    #   file:
-    #     path: "{{ plugin_dir }}"
-    #     state: directory
-    # - name: downloading terraform packages
-    #   unarchive:
-    #     dest: "{{ plugin_dir }}"
-    #     src: https://releases.hashicorp.com/terraform-provider-aws/2.55.0/terraform-provider-aws_2.55.0_linux_amd64.zip
-    #     remote_src: yes
-    - name: create plan file
-      file: path=../terraform/tfplan state=touch
     - name: "{{ terraform_action }}"
       terraform:
         force_init: "{{ force_init }}"
         project_path: ../terraform/ # required
-        plan_file: tfplan
         backend_config:
           region: "us-east-1"
           bucket: "awx-nextlinker-cmdb"
@@ -33,4 +21,3 @@
         state: "{{ terraform_state }}" # present, absent, planned
         variables:
           webserver_ip: "{{ webserver_ip }}"
-
