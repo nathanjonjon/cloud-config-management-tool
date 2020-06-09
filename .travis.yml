@@ -17,18 +17,18 @@ env:
   - tf_version=0.12.25 tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
 # Install dependencies
-# before_install:
-#   - mkdir $TRAVIS_BUILD_DIR/install
-#   - cd $TRAVIS_BUILD_DIR/install
-#   - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
-#   - unzip terraform_"$tf_version"_linux_amd64.zip
-#   - sudo mv terraform /usr/local/bin/
-#   - rm terraform_"$tf_version"_linux_amd64.zip
-#   - sudo apt-get install software-properties-common
-#   - sudo apt-add-repository --yes ppa:ansible/ansible
-#   - sudo apt-get update
-#   - sudo apt-get install ansible
-#   - ansible --version
+before_install:
+  - mkdir $TRAVIS_BUILD_DIR/install
+  - cd $TRAVIS_BUILD_DIR/install
+  - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+  - unzip terraform_"$tf_version"_linux_amd64.zip
+  - sudo mv terraform /usr/local/bin/
+  - rm terraform_"$tf_version"_linux_amd64.zip
+  - sudo apt-get install software-properties-common
+  - sudo apt-add-repository --yes ppa:ansible/ansible
+  - sudo apt-get update
+  - sudo apt-get install ansible
+  - ansible --version
 # Terraform Plan and Apply~~
 # Plan only on pull requests, Apply on merged code
 jobs:
@@ -57,24 +57,25 @@ jobs:
         - echo "No error, infra destroyed completely"
     - stage: branch merge
       # when test push, merge new with it
-      if: type IN (push) and (branch = test or branch = nathan)
+      if: type IN (push) and (branch = test or branch = nathan or branch=master)
       script:
         - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         - git fetch --all
         - git branch -a
         - $TRAVIS_BUILD_DIR/merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
     - stage: test notifications
-      if: type IN (push) and (branch = nathan or branch = test or branch = oscar/ansible)
+      if: type IN (push) and (branch = nathan or branch = test or branch=master)
       script:
         - echo "send notifications"
-        # - $TRAVIS_BUILD_DIR/webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
+        - $TRAVIS_BUILD_DIR/webhook.sh $mattermost_url $TRAVIS_BRANCH $TRAVIS_COMMIT
 notifications:
-  # email:
-  #   recipients:
-  #     - nathan.chang@nextlink.com.tw
-  #     - jenny.hong@nextlink.com.tw
-  #   on_success: always
-  #   on_failure: always
+  email:
+    recipients:
+      # - nathan.chang@nextlink.com.tw
+      # - jenny.hong@nextlink.com.tw
+      - oscar.tseng@nextlink.com.tw
+    on_success: always
+    on_failure: always
   webhooks:
     urls:
       - http://34.197.218.182:9000/hooks/awx
