@@ -1,0 +1,38 @@
+- name: play 1 - install apache & php
+  remote_user: ubuntu
+  hosts: 127.0.0.1
+  connection: local
+  become_user: root
+  gather_facts: true
+  tasks:
+    - name: "Install apache2"
+      package: name=apache2 state=present
+    - name: "Install apache2-php5"
+      package: name=libapache2-mod-php state=present
+    - name: "Install php-cli"
+      package: name=php-cli state=present
+    - name: "Install php-gd"
+      package: name=php-gd state=present      
+    - name: Enable rewrite module
+      apache2_module:
+        name: rewrite
+        state: present
+      notify:
+        - restart apache2
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted sleep=4
+- name: play 2 - ensure apache status
+  remote_user: ubuntu
+  hosts: 127.0.0.1
+  connection: local
+  become: true
+  become_user: root
+  gather_facts: true
+  tasks:
+    - name: Make sure a service is running
+      systemd:
+        state: started
+        name: apache2
+
+
