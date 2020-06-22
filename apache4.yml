@@ -1,0 +1,26 @@
+---
+- name: play 1 - install apache & php
+- remote_user: ubuntu
+  hosts: 127.0.0.1
+  connection: local
+  become_user: root
+  gather_facts: true
+  tasks:
+    - name: "Update repositories cache"
+      become: yes
+      apt:
+        update_cache: yes
+    #install and update apache2
+    - name: install apache2
+      apt: name=apache2 update_cache=yes state=latest
+    - debug:
+        msg: "install successfully !! "
+    - name: enabled mod_rewrite
+      apache2_module: name=rewrite state=present
+      notify:
+        - restart apache2
+    - debug:
+        msg: "rewrite successfully !! "
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted
