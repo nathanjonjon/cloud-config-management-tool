@@ -5,8 +5,8 @@
   vars:
     instance_type: t2.micro
     image: ami-db710fa3
-    keypair: nathan_try
-    region: us-west-2
+    keypair: tom-virginia
+    region: us-west-1
     count: 1
     #vars_files:
     #- secrets.yml

@@ -8,8 +8,8 @@
     instance_type: t2.micro
     image: ami-db710fa3
     security_group: webservers_sg
-    keypair: nathan_try
-    region: us-west-2
+    keypair: tom-virginia
+    region: us-west-1
     count: 1
   tasks:
       - name: h

@@ -7,7 +7,7 @@
   connection: local
   gather_facts: False
   vars:
-    region: us-west-2
+    region: us-west-1
 
   tasks:
       - name: verify ec2 info
@@ -35,7 +35,6 @@
               volume_type: gp2
         register: db_ami
       - debug: msg="{{ db_ami }}"
-
       - name: create web ami
         ec2_ami:
           instance_id: "{{lookup('file', './web_instance_id.txt')}}"
@@ -48,7 +47,7 @@
           root_device_name: /dev/xvda
           device_mapping:
             - device_name: /dev/xvda
-              size: 8
+              size: 16
               delete_on_termination: true
               volume_type: gp2
         register: web_ami
