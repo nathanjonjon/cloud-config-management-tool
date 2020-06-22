@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+    - apache5.yml
+  tasks:
+      apache5.yml
+      index.php
+      db.php
+      dump.sql
