@@ -1,0 +1,24 @@
+- name: play 1 - install apache & php
+  remote_user: ubuntu
+  hosts: 127.0.0.1
+  connection: local
+  become_user: root
+  gather_facts: true
+  tasks:
+    - name: "Update repositories cache"
+      become: yes
+      apt:
+        update_cache: yes
+    - debug:
+        msg: "update successfully !! "
+    ## using command line to install apache2 
+    - command: sudo apt-get install apache2 -y
+    - command: sudo systemctl start apache2
+    - command: sudo systemctl enable apache2
+    - command: sudo systemctl status apache2
+      args:
+        warn: false
+    - debug:
+        msg: "apache2 is available now !! "
+
+
