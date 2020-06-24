@@ -1,6 +1,6 @@
 # ansible-playbook -i hosts create_mysql_ami.yml --extra-vars "db=mysql-server version=5.7.*"
 ---
-- hosts: local
+- hosts: 127.0.0.1
   connection: local
   gather_facts: False
   tasks:
@@ -11,7 +11,7 @@
     - { key: 'pkg',value: 'mysql-server' }
     - { key: 'version',value: '5.7.*' }
 
-- hosts: local
+- hosts: 127.0.0.1
   connection: local
   gather_facts: False
   vars:
@@ -87,7 +87,7 @@
     apt:
       update_cache: yes
       force_apt_get: true
-      name: "{{ hostvars[ groups.local[0] ].db.pkg }}={{ hostvars[ groups.local[0] ].db.version }}"
+      name: "{{ hostvars[ '127.0.0.1' ].db.pkg }}={{ hostvars[ groups.local[0] ].db.version }}"
       state: present
   - service: 
       name: mysql
@@ -97,7 +97,7 @@
     package_facts:
       manager: auto
 
-- hosts: local
+- hosts: 127.0.0.1
   connection: local
   gather_facts: False
   tasks:
@@ -107,7 +107,7 @@
       instance_id: "{{ item.id }}"
       region: "{{ region }}"
       state: present
-      name: "{{ db.pkg }}-{{ hostvars[ groups['db'][0] ]['ansible_facts']['packages']['mysql-server'][0]['version'] }}"
+      name: "{{ db.pkg }}-{{ hostvars[ '127.0.0.1' ]['ansible_facts']['packages']['mysql-server'][0]['version'] }}"
       wait: yes
       architecture: amd
       virtualization_type: hvm

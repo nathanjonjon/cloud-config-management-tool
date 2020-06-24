@@ -1,6 +1,6 @@
 # ansible-playbook -i hosts create_apache_ami.yml --extra-vars "web=apache2 version=2.4.18*"
 ---
-- hosts: local
+- hosts: 127.0.0.1
   connection: local
   gather_facts: False
   tasks:
@@ -11,7 +11,7 @@
     - { key: 'pkg',value: 'apache2' }
     - { key: 'version',value: '2.4.18*' }
 
-- hosts: local
+- hosts: 127.0.0.1
   connection: local
   gather_facts: False
   vars:
@@ -86,7 +86,7 @@
     apt:
       update_cache: yes
       force_apt_get: true
-      name: "{{ hostvars[ groups.local[0] ].web.pkg }}={{ hostvars[ groups.local[0] ].web.version }}"
+      name: "{{ hostvars[ '127.0.0.1' ].web.pkg }}={{ hostvars[ groups.local[0] ].web.version }}"
       state: present
   - service: 
       name: apache2
@@ -96,7 +96,7 @@
     package_facts:
       manager: auto
 
-- hosts: local
+- hosts: 127.0.0.1
   connection: local
   gather_facts: False
   tasks:
@@ -106,7 +106,7 @@
       instance_id: "{{ item.id }}"
       region: "{{ region }}"
       state: present
-      name: "{{ web.pkg }}-{{ hostvars[ groups['web'][0] ]['ansible_facts']['packages']['apache2'][0]['version'] }}"
+      name: "{{ web.pkg }}-{{ hostvars[ '127.0.0.1' ]['ansible_facts']['packages']['apache2'][0]['version'] }}"
       wait: yes
       architecture: amd
       virtualization_type: hvm

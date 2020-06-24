@@ -1,5 +1,5 @@
 ---
-- hosts: local
+- hosts: 127.0.0.1
   connection: local
   gather_facts: False
   tasks:
@@ -11,7 +11,7 @@
     - { key: 'version',value: '2.4.18*' }
 
 - name: Checking AMI existence
-  hosts: local
+  hosts: 127.0.0.1
   gather_facts: false
   become: yes
   tasks:
