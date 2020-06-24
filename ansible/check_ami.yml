@@ -15,10 +15,10 @@
   gather_facts: false
   become: yes
   tasks:
-  - name: Ensure botocore and boto3 modules are installed
-    pip:
-      name:         [ "boto3", "botocore"]
-      extra_args:   "--user"
+  # - name: Ensure botocore and boto3 modules are installed
+  #   pip:
+  #     name:         [ "boto3", "botocore"]
+  #     extra_args:   "--user"
   - name: checking ami
     ec2_ami_info:
       filters: 
