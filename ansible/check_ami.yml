@@ -1,5 +1,5 @@
 ---
-- hosts: 127.0.0.1
+- hosts: local
   connection: local
   gather_facts: False
   tasks:
@@ -11,14 +11,14 @@
     - { key: 'version',value: '2.4.18*' }
 
 - name: Checking AMI existence
-  hosts: 127.0.0.1
+  hosts: local
   gather_facts: false
   become: yes
   tasks:
-  # - name: Ensure botocore and boto3 modules are installed
-  #   pip:
-  #     name:         [ "boto3", "botocore"]
-  #     extra_args:   "--user"
+  - name: Ensure botocore and boto3 modules are installed
+    pip:
+      name:         [ "boto3", "botocore"]
+      extra_args:   "--user"
   - name: checking ami
     ec2_ami_info:
       filters: 
