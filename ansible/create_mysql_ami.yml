@@ -1,5 +1,16 @@
-# ansible-playbook -i hosts create_mysql_ami.yml --extra-vars "app=mysql-server version=5.7.*"
+# ansible-playbook -i hosts create_mysql_ami.yml --extra-vars "db=mysql-server version=5.7.*"
 ---
+- hosts: local
+  connection: local
+  gather_facts: False
+  tasks:
+  - set_fact:
+      db: "{{ db | default({}) | combine({item.key: item.value}) }}"
+      region: us-west-2
+    with_items:
+    - { key: 'pkg',value: 'mysql-server' }
+    - { key: 'version',value: '5.7.*' }
+
 - hosts: local
   connection: local
   gather_facts: False
@@ -7,10 +18,8 @@
     instance_type: t2.micro
     image: ami-db710fa3 # ubuntu AMI
     keypair: oscar-nl-oregon
-    region: us-west-2
     count: 1
     security_group: ami-instance-sg
-    app: mysql-server
   tasks:
   - name: Ensure botocore and boto3 modules are installed
     pip:
@@ -42,7 +51,7 @@
       group_id: 
       - "{{ sg.group_id }}"
       instance_tags:
-        Name: "{{ app }}-AMI-DB"
+        Name: "{{ db.pkg }}-AMI-DB"
     register: ec2
   - debug: msg="{{ ec2 }}"
   - name: add it to hosts file
@@ -70,18 +79,15 @@
     with_items: "{{ ec2.instances }}"
 
 - hosts: db
-  vars:
-    app: mysql-server
-    version: 5.7.21*
   remote_user: ubuntu
   become: yes
   gather_facts: no
   tasks:
-  - name: "Install {{ app }}"
+  - name: "Install {{ db }}"
     apt:
       update_cache: yes
       force_apt_get: true
-      name: "{{ app }}={{ version }}"
+      name: "{{ hostvars[ groups.local[0] ].db.pkg }}={{ hostvars[ groups.local[0] ].db.version }}"
       state: present
   - service: 
       name: mysql
@@ -94,10 +100,6 @@
 - hosts: local
   connection: local
   gather_facts: False
-  vars:
-    app: mysql-server
-    region: us-west-2
-    version: 5.7.21*
   tasks:
   - name: create ami
     with_items: "{{ ec2.instances }}"
@@ -105,7 +107,7 @@
       instance_id: "{{ item.id }}"
       region: "{{ region }}"
       state: present
-      name: "{{ app }}-{{ hostvars[ groups['db'][0] ]['ansible_facts']['packages']['mysql-server'][0]['version'] }}"
+      name: "{{ db.pkg }}-{{ hostvars[ groups['db'][0] ]['ansible_facts']['packages']['mysql-server'][0]['version'] }}"
       wait: yes
       architecture: amd
       virtualization_type: hvm
@@ -116,7 +118,7 @@
             delete_on_termination: true
             volume_type: gp2
       tags:
-        app: "{{ app }}={{ hostvars[ groups['db'][0] ]['ansible_facts']['packages']['mysql-server'][0]['version'] }}"
+        app: "{{ db.pkg }}={{ hostvars[ groups['db'][0] ]['ansible_facts']['packages']['mysql-server'][0]['version'] }}"
   - name: Terminate EC2 Instance(s)
     ec2:
       instance_ids: 

@@ -17,3 +17,6 @@ variable "bucket_name" {
   default = "nextlink-bucket"
 }
 
+variable "web_ami_id" {default = ""}
+
+variable "db_ami_id" {default = ""}

@@ -74,7 +74,7 @@ resource "aws_security_group" "db_sg" {
 
 resource "aws_instance" "Nathan_WebServer" {
   # ami             = "ami-003634241a8fcdec0"
-  ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
+  ami = var.web_ami_id # The Web AMI we previously created
   instance_type   = "t2.micro"
   availability_zone = var.availability_zone
   key_name = var.key_name
@@ -90,7 +90,7 @@ resource "aws_instance" "Nathan_WebServer" {
 }
 
 resource "aws_instance" "Nathan_DB" {
-  ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
+  ami = var.db_ami_id # The DB AMI we previously created
   instance_type   = "t2.micro"
   availability_zone = var.availability_zone
   key_name = var.key_name
