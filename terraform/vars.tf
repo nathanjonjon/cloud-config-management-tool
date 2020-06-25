@@ -18,6 +18,3 @@ variable "webserver_ip" {}
 variable "dbserver_ip" {}
 variable "web_ami_id" {}
 variable "db_ami_id" {}
-variable "AWS_REGION" {}
-variable "availability_zone" {}
-variable "key_name" {}
