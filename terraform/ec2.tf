@@ -81,12 +81,6 @@ resource "aws_instance" "Nathan_WebServer" {
   vpc_security_group_ids = [aws_security_group.web_sg.id]
   subnet_id = aws_subnet.main-public.id
   tags = {Name = "Nathan_WebServer", Owner = "Nathan"}
-  # connection { # Connect remote EC2
-  #   type        = "tcp"
-  #   host        = self.public_ip # bind public ip
-  #   user        = "ec2-user"
-  #   private_key = file(var.aws_key_pair)
-  # }
 }
 
 resource "aws_instance" "Nathan_DB" {
