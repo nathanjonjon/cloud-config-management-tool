@@ -10,13 +10,6 @@ resource "aws_security_group" "web_sg" {
     cidr_blocks = ["10.0.0.0/16", "220.133.223.215/32", "211.75.165.158/32"]
   }
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   ingress {
     description = "22 port"
     from_port   = 22
@@ -46,13 +39,6 @@ resource "aws_security_group" "db_sg" {
     security_groups = [aws_security_group.web_sg.id]
   }
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   ingress {
     description = "22 port"
     from_port   = 22
@@ -74,24 +60,20 @@ resource "aws_security_group" "db_sg" {
 
 resource "aws_instance" "Nathan_WebServer" {
   # ami             = "ami-003634241a8fcdec0"
-  ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
+  ami = var.web_ami_id # The Web AMI we previously created
   instance_type   = "t2.micro"
+  private_ip = var.webserver_ip
   availability_zone = var.availability_zone
   key_name = var.key_name
   vpc_security_group_ids = [aws_security_group.web_sg.id]
   subnet_id = aws_subnet.main-public.id
   tags = {Name = "Nathan_WebServer", Owner = "Nathan"}
-  # connection { # Connect remote EC2
-  #   type        = "tcp"
-  #   host        = self.public_ip # bind public ip
-  #   user        = "ec2-user"
-  #   private_key = file(var.aws_key_pair)
-  # }
 }
 
 resource "aws_instance" "Nathan_DB" {
-  ami = data.aws_ami.ubuntu.id # Ubuntu Server  latest version
+  ami = var.db_ami_id # The DB AMI we previously created
   instance_type   = "t2.micro"
+  private_ip = var.dbserver_ip
   availability_zone = var.availability_zone
   key_name = var.key_name
   vpc_security_group_ids = [aws_security_group.db_sg.id]

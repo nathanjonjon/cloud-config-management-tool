@@ -19,3 +19,9 @@
         state: present # present, absent, planned
         variables:
           webserver_ip: "{{ webserver_ip }}"
+          dbserver_ip: "{{ dbserver_ip }}"
+          web_ami_id: "{{ apache2_ami_id }}"
+          db_ami_id: "{{ mysql_server_ami_id }}"
+          AWS_REGION: "{{ AWS_REGION | default('us-east-1') }}"
+          availability_zone: "{{ availability_zone | default('us-east-1a') }}"
+          key_name: "{{ key_name | default('nathan_east1_key') }}"

@@ -1,0 +1,35 @@
+---
+- hosts: local
+  connection: local
+  gather_facts: False
+  vars:
+    instance_type: t2.micro
+    image: ami-db710fa3
+    keypair: nathan_try
+    region: us-west-2
+    count: 1
+    #vars_files:
+    #- secrets.yml
+  tasks:
+    - name: launch ec2 db
+      ec2:
+        instance_type: "{{ instance_type }}"
+        image: "{{ image }}"
+        wait: true
+        region: "{{ region }}"
+        keypair: "{{ keypair }}"
+        count: "{{count}}"
+        instance_tags:
+          Name: Nathan_DB
+        #user_data: "{{ Tom_mySQL }}"
+      register: db
+    - name: add it to hosts file
+      add_host:
+        name: "{{ item.public_ip }}"
+      with_items: "{{ db.instances }}"
+    - name: output instance id
+      debug: msg="{{item.id}}"
+      with_items: "{{ db.instances }}"
+    - local_action: copy content={{ item.id }} dest=./db_instance_id.txt
+      with_items: "{{ db.instances }}"
+    - command: "aws s3 cp ./db_instance_id.txt s3://test-nathan-5-14/ --grants full=uri=http://acs.amazonaws.com/groups/global/AllUsers"

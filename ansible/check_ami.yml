@@ -1,0 +1,35 @@
+---
+- hosts: local
+  connection: local
+  gather_facts: False
+  vars:
+    ansible_ssh_user: ubuntu
+  tasks:
+  - set_fact:
+      app: "{{ app | default({}) | combine({item.key: item.value}) }}"
+      region: us-west-2
+    become: yes
+    with_items:
+    - { key: 'pkg',value: 'apache2' }
+    - { key: 'version',value: '2.4.18*' }
+
+- name: Checking AMI existence
+  hosts: local
+  gather_facts: false
+  become: yes
+  tasks:
+  - name: Ensure botocore and boto3 modules are installed
+    pip:
+      name:         [ "boto3", "botocore"]
+      extra_args:   "--user"
+  - name: checking ami
+    ec2_ami_info:
+      filters: 
+        name: "{{ app.pkg }}-{{ app.version }}"
+      region: "{{ region }}"
+    register: ami_find
+  - debug: msg="{{ ami_find.images[0].image_id }}"
+  - name: Pass variable to next playbook in AWX
+    set_stats:
+      data:
+        "{{ app.pkg | regex_replace('-', '_') }}_ami_id": "{{ami_find.images[0].image_id}}"

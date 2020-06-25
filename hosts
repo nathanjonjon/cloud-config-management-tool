@@ -3,9 +3,3 @@ localhost
 
 [local:vars]
 ansible_python_interpreter="/usr/bin/python2.7"
-
-[webservers]
-10.0.1.10
-
-[dbservers]
-10.0.2.10

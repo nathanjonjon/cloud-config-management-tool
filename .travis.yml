@@ -9,7 +9,6 @@ branches:
     - nathan
     - dev
     - test
-    - new
     - tom
     - oscar/ansible
 # Export variables

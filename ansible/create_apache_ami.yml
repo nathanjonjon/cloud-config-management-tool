@@ -1,0 +1,137 @@
+# ansible-playbook -i hosts create_apache_ami.yml --extra-vars "web=apache2 version=2.4.18*"
+---
+- hosts: local
+  connection: local
+  gather_facts: False
+  tasks:
+  - set_fact:
+      web: "{{ web | default({}) | combine({item.key: item.value}) }}"
+      region: us-west-2
+    with_items:
+    - { key: 'pkg',value: 'apache2' }
+    - { key: 'version',value: '2.4.*' }
+
+- hosts: local
+  connection: local
+  gather_facts: False
+  vars:
+    instance_type: t2.micro
+    keypair: oscar-nl-oregon
+    count: 1
+    security_group: ami-instance-sg
+  tasks:
+  - name: Ensure botocore and boto3 modules are installed
+    pip:
+      name:         [ "boto3", "botocore"]
+      extra_args:   "--user"
+  - name: Create a security group
+    ec2_group:
+      name: "{{ security_group }}"
+      description: The ec2 for ami security group
+      region: "{{ region }}"
+      rules:
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+      rules_egress:
+        - proto: all
+          cidr_ip: 0.0.0.0/0
+    register: sg
+  - name: Checking official Ubuntu AMI
+    ec2_ami_info:
+      owners: 099720109477
+      region: "{{ region }}"
+      filters:
+        name: "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64*"
+    register: ubuntu
+  - name: launch ec2 web 
+    ec2:
+      instance_type: "{{ instance_type }}"
+      image: "{{ ubuntu.images[0].image_id }}"
+      wait: true
+      region: "{{ region }}"
+      keypair: "{{ keypair }}"
+      count: "{{count}}"
+      group_id: 
+      - "{{ sg.group_id }}"
+      instance_tags:
+        Name: "{{ web.pkg }}-AMI-Web"
+    register: ec2
+  - name: add it to hosts file
+    add_host:
+      name: "{{ item.public_ip }}"
+      group: web
+    with_items: "{{ ec2.instances }}"
+  - name: output instance id
+    debug: msg="{{item.id}}"
+    with_items: "{{ ec2.instances }}"
+  - name: Add tag to Instance(s)
+    ec2_tag:
+      resource: "{{ item.id }}" 
+      region: "{{ region }}" 
+      state: "present"
+    with_items: "{{ ec2.instances }}"
+    args:
+      tags:
+        Type: webserver
+  - name: Wait for SSH to come up
+    wait_for:
+      host: "{{ item.public_ip }}"
+      port: 22 
+      state: started 
+    with_items: "{{ ec2.instances }}"
+
+- hosts: web
+  remote_user: ubuntu
+  become: yes
+  gather_facts: no
+  tasks:
+  - name: Install Apache
+    apt:
+      update_cache: yes
+      force_apt_get: true
+      name: "{{ hostvars[ groups.local[0] ].web.pkg }}={{ hostvars[ groups.local[0] ].web.version }}"
+      state: present
+  - service: 
+      name: apache2
+      state: started
+      enabled: yes
+  - name: Gather the rpm package facts
+    package_facts:
+      manager: auto
+
+- hosts: local
+  connection: local
+  gather_facts: False
+  tasks:
+  - name: create ami
+    with_items: "{{ ec2.instances }}"
+    ec2_ami:
+      instance_id: "{{ item.id }}"
+      region: "{{ region }}"
+      state: present
+      name: "{{ web.pkg }}-{{ hostvars[ groups['web'][0] ]['ansible_facts']['packages']['apache2'][0]['version'] }}"
+      wait: yes
+      architecture: amd
+      virtualization_type: hvm
+      root_device_name: /dev/xvda
+      device_mapping:
+          - device_name: /dev/xvda
+            size: 10
+            delete_on_termination: true
+            volume_type: gp2
+      tags:
+        app: "{{ web.pkg }}={{ hostvars[ groups['web'][0] ]['ansible_facts']['packages']['apache2'][0]['version'] }}"
+    register: ami_created
+  - name: Terminate EC2 Instance(s)
+    ec2:
+      instance_ids: 
+      - "{{ item.id }}"
+      state: absent
+      region: "{{ region }}"
+    with_items: "{{ ec2.instances }}"
+  - name: Pass variable to next playbook in AWX
+    set_stats:
+      data:
+        "{{ web.pkg | regex_replace('-', '_') }}_ami_id": "{{ ami_created.results[0].image_id }}"

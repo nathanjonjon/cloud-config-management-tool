@@ -16,3 +16,4 @@
         state: absent
         variables:
           webserver_ip: "{{ webserver_ip }}"
+          dbserver_ip: "{{ dbserver_ip }}"
