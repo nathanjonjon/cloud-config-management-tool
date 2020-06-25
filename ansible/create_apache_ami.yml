@@ -48,7 +48,7 @@
   - name: launch ec2 web 
     ec2:
       instance_type: "{{ instance_type }}"
-      image: "{{ ubuntu[0].image_id }}"
+      image: "{{ ubuntu.images[0].image_id }}"
       wait: true
       region: "{{ region }}"
       keypair: "{{ keypair }}"
