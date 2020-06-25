@@ -32,4 +32,4 @@
   - name: Pass variable to next playbook in AWX
     set_stats:
       data:
-        "{{ app.pkg }}_ami_id": "{{ami_find.images[0].image_id}}"
+        "{{ app.pkg | regex_replace('-', '_') }}_ami_id": "{{ami_find.images[0].image_id}}"
