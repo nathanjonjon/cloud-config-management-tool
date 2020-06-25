@@ -20,4 +20,4 @@
         variables:
           webserver_ip: "{{ webserver_ip }}"
           web_ami_id: "{{ apache2_ami_id }}"
-          db_ami_id: "{{ mysql-server_ami_id }}"
+          db_ami_id: "{{ mysql_server_ami_id }}"
