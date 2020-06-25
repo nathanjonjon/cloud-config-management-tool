@@ -5,11 +5,11 @@
   vars:
     ansible_ssh_user: ubuntu
   tasks:
-  - sudo:
-      become_user: root
   - set_fact:
       app: "{{ app | default({}) | combine({item.key: item.value}) }}"
       region: us-west-2
+    become: yes
+    become_user: root
     with_items:
     - { key: 'pkg',value: 'apache2' }
     - { key: 'version',value: '2.4.18*' }
