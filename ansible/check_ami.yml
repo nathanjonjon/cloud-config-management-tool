@@ -9,7 +9,7 @@
       app: "{{ app | default({}) | combine({item.key: item.value}) }}"
       region: us-west-2
     become: yes
-    become_user: root
+    become_user: ubuntu
     with_items:
     - { key: 'pkg',value: 'apache2' }
     - { key: 'version',value: '2.4.18*' }
