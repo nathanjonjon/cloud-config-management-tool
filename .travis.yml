@@ -54,14 +54,14 @@ jobs:
         - terraform apply $tf_apply_cli_options
         - terraform destroy -auto-approve
         - echo "No error, infra destroyed completely"
-    - stage: branch merge
-      # when test push, merge new with it
-      if: type IN (push) and (branch = test or branch = nathan or branch=master)
-      script:
-        - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
-        - git fetch --all
-        - git branch -a
-        - $TRAVIS_BUILD_DIR/merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
+    # - stage: branch merge
+    #   # when test push, merge new with it
+    #   if: type IN (push) and (branch = test or branch = nathan or branch=master)
+    #   script:
+    #     - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+    #     - git fetch --all
+    #     - git branch -a
+    #     - $TRAVIS_BUILD_DIR/merge.sh $USER_NAME $PASS_WORD $TRAVIS_BRANCH
     - stage: test notifications
       if: type IN (push) and (branch = nathan or branch = test or branch=master)
       script:
