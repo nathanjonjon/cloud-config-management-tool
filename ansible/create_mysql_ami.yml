@@ -125,6 +125,7 @@
       tags:
         app: "{{ db.pkg }}={{ hostvars[ groups['db'][0] ]['ansible_facts']['packages']['mysql-server'][0]['version'] }}"
     register: ami_created
+  - debug: msg="{{ ami_created }}"
   - name: Terminate EC2 Instance(s)
     ec2:
       instance_ids: 

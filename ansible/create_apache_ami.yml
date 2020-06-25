@@ -124,6 +124,7 @@
       tags:
         app: "{{ web.pkg }}={{ hostvars[ groups['web'][0] ]['ansible_facts']['packages']['apache2'][0]['version'] }}"
     register: ami_created
+  - debug: msg="{{ ami_created }}"
   - name: Terminate EC2 Instance(s)
     ec2:
       instance_ids: 
