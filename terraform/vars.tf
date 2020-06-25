@@ -14,7 +14,7 @@ variable "bucket_name" {
   default = "nextlink-bucket"
 }
 
-variable "webserver_ip" {}
-variable "dbserver_ip" {}
-variable "web_ami_id" {}
-variable "db_ami_id" {}
+variable "webserver_ip" { default = "10.0.1.10"}
+variable "dbserver_ip" { default = "10.0.2.10" }
+variable "web_ami_id" { default = "" }
+variable "db_ami_id" { default = "" }
