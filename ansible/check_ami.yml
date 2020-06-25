@@ -2,7 +2,11 @@
 - hosts: local
   connection: local
   gather_facts: False
+  vars:
+    ansible_ssh_user: ubuntu
   tasks:
+  - sudo:
+      become_user: root
   - set_fact:
       app: "{{ app | default({}) | combine({item.key: item.value}) }}"
       region: us-west-2
