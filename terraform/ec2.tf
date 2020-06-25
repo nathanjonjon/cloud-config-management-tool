@@ -76,6 +76,7 @@ resource "aws_instance" "Nathan_WebServer" {
   # ami             = "ami-003634241a8fcdec0"
   ami = var.web_ami_id # The Web AMI we previously created
   instance_type   = "t2.micro"
+  private_ip = var.webserver_ip
   availability_zone = var.availability_zone
   key_name = var.key_name
   vpc_security_group_ids = [aws_security_group.web_sg.id]
@@ -86,6 +87,7 @@ resource "aws_instance" "Nathan_WebServer" {
 resource "aws_instance" "Nathan_DB" {
   ami = var.db_ami_id # The DB AMI we previously created
   instance_type   = "t2.micro"
+  private_ip = var.dbserver_ip
   availability_zone = var.availability_zone
   key_name = var.key_name
   vpc_security_group_ids = [aws_security_group.db_sg.id]
