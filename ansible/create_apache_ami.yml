@@ -9,7 +9,7 @@
       region: us-west-2
     with_items:
     - { key: 'pkg',value: 'apache2' }
-    - { key: 'version',value: '2.4.18-*' }
+    - { key: 'version',value: '2.4.*' }
 
 - hosts: local
   connection: local
