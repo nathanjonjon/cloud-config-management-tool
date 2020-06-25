@@ -9,7 +9,7 @@
       region: us-west-2
     with_items:
     - { key: 'pkg',value: 'apache2' }
-    - { key: 'version',value: '2.4.18*' }
+    - { key: 'version',value: '2.4.18-*' }
 
 - hosts: local
   connection: local
@@ -134,4 +134,4 @@
   - name: Pass variable to next playbook in AWX
     set_stats:
       data:
-        "{{ web.pkg | regex_replace('-', '_') }}_ami_id": "{{ami_created.image_id}}"
+        "{{ web.pkg | regex_replace('-', '_') }}_ami_id": "{{ ami_created.image_id }}"
