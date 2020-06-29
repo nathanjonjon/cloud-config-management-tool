@@ -72,7 +72,7 @@ notifications:
     recipients:
       # - nathan.chang@nextlink.com.tw
       # - jenny.hong@nextlink.com.tw
-      - oscar.tseng@nextlink.com.tw
+      # - oscar.tseng@nextlink.com.tw
     on_success: always
     on_failure: always
   webhooks:
