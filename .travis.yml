@@ -67,8 +67,8 @@ jobs:
 notifications:
   email:
     recipients:
-      - nathan.chang@nextlink.com.tw
-      - jenny.hong@nextlink.com.tw
+     # - nathan.chang@nextlink.com.tw
+     # - jenny.hong@nextlink.com.tw
     on_success: always
     on_failure: always
   webhooks:
