@@ -1,6 +1,6 @@
 # cmdb_project_by_nextlinker_
 ## DevOps, AWS, Terraform, Ansible, CI/CD, IaC
-![](https://github.com/nathanjonjon/CMDB_project/structure.png)
+![](https://github.com/nathanjonjon/ImageCache/raw/master/CMDB_project/structure.png)
 [![Build Status](https://travis-ci.org/internnn/nextlinker_cmdb.svg?branch=master)](https://travis-ci.org/internnn/nextlinker_cmdb)
 
 It's a project assigned by supervisor in MS team and was developed by intern partners and me during my internship. This CMDB enables MS and SA colleagues to validate, deploy the infra automatically, and it supports version control, tracking and a system to notify and ask for approval of deployment. Moreover, combined with Terraformer and AWX, it is able to manage existing infra of cross-account clients.
