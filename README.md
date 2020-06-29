@@ -1,6 +1,10 @@
-# nextlinker_cmdb
+# cmdb_project_by_nextlinker_
 [![Build Status](https://travis-ci.org/internnn/nextlinker_cmdb.svg?branch=master)](https://travis-ci.org/internnn/nextlinker_cmdb)
 
-In apply.sh, I hardcode a path of a NathanCredentials.tfvars file that contains my accessKey, secretAccessKey and keyPair info to launch EC2s.
+1. Use Terraformer and write tf codes of your infra
 
-Please edit the file according to your path.
+2. Pushing them onto GitHub and pull request triggers Travis CI and complete validation automatically
+
+3. Travis CI informs AWX by webhook
+
+4. In AWX, playbooks creates golden AMIs of our infra, save tfstate files to S3 and deploy the infra automatically.
