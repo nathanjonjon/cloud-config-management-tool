@@ -1,4 +1,4 @@
-# cmdb_project_by_nextlinker_
+# Configure Management Tool
 ## DevOps, AWS, Terraform, Ansible, CI/CD, IaC
 ![](https://github.com/nathanjonjon/CMDB_project/blob/master/structure.png)
 [![Build Status](https://travis-ci.org/internnn/nextlinker_cmdb.svg?branch=master)](https://travis-ci.org/internnn/nextlinker_cmdb)
